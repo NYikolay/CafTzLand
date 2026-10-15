@@ -2,10 +2,12 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from sqladmin import Admin
 
 from app.infrastructure.config.settings import AppEnv, Settings, get_settings
 from app.infrastructure.db.session import create_db_engine, create_sessionmaker
 from app.infrastructure.logging import configure_logging
+from app.presentation.admin.auth import AdminAuthBackend
 from app.presentation.api import health
 from app.presentation.api.v1 import router as api_v1_router
 from app.presentation.errors import register_exception_handlers
@@ -40,6 +42,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     register_exception_handlers(
         app,
         expose_details=app_settings.app_env is not AppEnv.PRODUCTION,
+    )
+
+    Admin(
+        app=app,
+        engine=engine,
+        authentication_backend=AdminAuthBackend(app_settings),
+        title=app_settings.app_name,
     )
 
     app.include_router(health.router)
