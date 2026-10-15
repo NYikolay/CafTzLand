@@ -49,6 +49,7 @@ select = ["E", "W", "F", "I", "B", "UP", "C4", "SIM", "ASYNC", "PT", "RUF"]
 python_version = "3.14"
 files = ["src", "tests"]
 mypy_path = "src"
+plugins = ["pydantic.mypy"]
 check_untyped_defs = true
 disallow_incomplete_defs = true
 disallow_untyped_defs = true

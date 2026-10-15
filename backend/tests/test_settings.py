@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 from pydantic import ValidationError
 
@@ -5,7 +7,7 @@ from app.infrastructure.config.settings import Settings
 
 
 def make_settings(**overrides: object) -> Settings:
-    values: dict[str, object] = {
+    values: dict[str, Any] = {
         "secret_key": "test-secret-key-0123456789abcdef",
         "admin_password": "test-admin-pass",
     }
