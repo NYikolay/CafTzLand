@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.health.check_readiness import CheckReadiness
 from app.application.leads.create_lead import CreateLead
+from app.application.leads.list_interest_options import ListInterestOptions
 from app.application.products.list_products import ListProducts
 from app.infrastructure.db.probe import AsyncDatabaseProbe
 from app.infrastructure.db.repositories.lead_repository import SqlAlchemyLeadRepository
@@ -33,3 +34,7 @@ def get_create_lead(request: Request) -> CreateLead:
 
 def get_list_products(request: Request) -> ListProducts:
     return ListProducts(SqlAlchemyProductRepository(request.app.state.sessionmaker))
+
+
+def get_list_interest_options() -> ListInterestOptions:
+    return ListInterestOptions()

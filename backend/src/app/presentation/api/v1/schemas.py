@@ -5,7 +5,7 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from pydantic_core import PydanticCustomError
 
-from app.domain.leads import Interest, Lead, LeadSource
+from app.domain.leads import Interest, InterestName, Lead, LeadSource
 from app.domain.products import ProductKind
 from app.infrastructure.phone import normalize_belarus_phone
 
@@ -95,6 +95,11 @@ def to_domain_source(raw: dict[str, str] | None) -> LeadSource | None:
 class LeadCreateResponse(BaseModel):
     id: int
     duplicate: bool
+
+
+class InterestOptionOut(BaseModel):
+    value: Interest
+    label: InterestName
 
 
 class ProductVariantOut(BaseModel):
