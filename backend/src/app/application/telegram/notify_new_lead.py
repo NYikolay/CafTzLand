@@ -55,12 +55,23 @@ class NotifyNewLead:
             except TelegramBlockedError:
                 deactivated += 1
                 if subscriber.id is not None:
-                    await self._subscribers.deactivate(subscriber.id)
+                    try:
+                        await self._subscribers.deactivate(subscriber.id)
+                    except Exception:
+                        logger.exception(
+                            "Failed to deactivate telegram subscriber %s",
+                            subscriber.telegram_user_id,
+                        )
                 logger.info("Telegram subscriber %s blocked the bot", subscriber.telegram_user_id)
             except TelegramDeliveryError as exc:
                 failed += 1
                 logger.warning(
                     "Telegram delivery to %s failed: %s", subscriber.telegram_user_id, exc
+                )
+            except Exception:
+                failed += 1
+                logger.exception(
+                    "Telegram delivery to %s failed unexpectedly", subscriber.telegram_user_id
                 )
             else:
                 sent += 1

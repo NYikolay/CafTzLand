@@ -16,14 +16,21 @@ PRODUCT = Product(
 
 
 class FakeSubscriberRepository:
-    def __init__(self, subscribers: list[TelegramSubscriber]) -> None:
+    def __init__(
+        self,
+        subscribers: list[TelegramSubscriber],
+        deactivate_raises: Exception | None = None,
+    ) -> None:
         self._subscribers = subscribers
+        self._deactivate_raises = deactivate_raises
         self.deactivated: list[int] = []
 
     async def list_active(self) -> list[TelegramSubscriber]:
         return list(self._subscribers)
 
     async def deactivate(self, subscriber_id: int) -> None:
+        if self._deactivate_raises is not None:
+            raise self._deactivate_raises
         self.deactivated.append(subscriber_id)
 
 
@@ -78,8 +85,9 @@ def make_use_case(
     *,
     notifier: FakeNotifier | None = None,
     products: FakeProductRepository | None = None,
+    deactivate_raises: Exception | None = None,
 ) -> tuple[NotifyNewLead, FakeSubscriberRepository, FakeNotifier]:
-    repository = FakeSubscriberRepository(subscribers)
+    repository = FakeSubscriberRepository(subscribers, deactivate_raises=deactivate_raises)
     fake_notifier = notifier if notifier is not None else FakeNotifier()
     use_case = NotifyNewLead(
         subscribers=repository,
@@ -149,4 +157,30 @@ async def test_counts_delivery_errors() -> None:
     assert result.sent == 1
     assert result.deactivated == 0
     assert repository.deactivated == []
+    assert [chat_id for chat_id, _ in notifier.sent] == [222]
+
+
+async def test_unexpected_notifier_error_does_not_abort_broadcast() -> None:
+    use_case, repository, notifier = make_use_case(
+        [make_subscriber(1, 111), make_subscriber(2, 222)],
+        notifier=FakeNotifier(errors={111: RuntimeError("boom")}),
+    )
+
+    result = await use_case(make_lead())
+
+    assert result == NotifyLeadResult(total=2, sent=1, failed=1, deactivated=0)
+    assert repository.deactivated == []
+    assert [chat_id for chat_id, _ in notifier.sent] == [222]
+
+
+async def test_failed_deactivation_does_not_abort_broadcast() -> None:
+    use_case, _, notifier = make_use_case(
+        [make_subscriber(1, 111), make_subscriber(2, 222)],
+        notifier=FakeNotifier(errors={111: TelegramBlockedError()}),
+        deactivate_raises=RuntimeError("db down"),
+    )
+
+    result = await use_case(make_lead())
+
+    assert result == NotifyLeadResult(total=2, sent=1, failed=0, deactivated=1)
     assert [chat_id for chat_id, _ in notifier.sent] == [222]
