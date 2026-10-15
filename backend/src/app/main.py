@@ -8,6 +8,7 @@ from app.infrastructure.db.session import create_db_engine, create_sessionmaker
 from app.infrastructure.logging import configure_logging
 from app.presentation.api import health
 from app.presentation.api.v1 import router as api_v1_router
+from app.presentation.middlewares import register_middlewares
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -32,6 +33,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = app_settings
     app.state.db_engine = engine
     app.state.sessionmaker = sessionmaker
+
+    register_middlewares(app, app_settings)
 
     app.include_router(health.router)
     app.include_router(api_v1_router)
