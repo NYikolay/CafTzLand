@@ -3,11 +3,12 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.infrastructure.config.settings import Settings, get_settings
+from app.infrastructure.config.settings import AppEnv, Settings, get_settings
 from app.infrastructure.db.session import create_db_engine, create_sessionmaker
 from app.infrastructure.logging import configure_logging
 from app.presentation.api import health
 from app.presentation.api.v1 import router as api_v1_router
+from app.presentation.errors import register_exception_handlers
 from app.presentation.middlewares import register_middlewares
 
 
@@ -35,6 +36,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.sessionmaker = sessionmaker
 
     register_middlewares(app, app_settings)
+
+    register_exception_handlers(
+        app,
+        expose_details=app_settings.app_env is not AppEnv.PRODUCTION,
+    )
 
     app.include_router(health.router)
     app.include_router(api_v1_router)
