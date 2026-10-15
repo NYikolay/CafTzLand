@@ -13,6 +13,13 @@ class SqlAlchemyProductRepository:
     def __init__(self, sessionmaker: async_sessionmaker[AsyncSession]) -> None:
         self._sessionmaker = sessionmaker
 
+    async def get(self, product_id: int) -> Product | None:
+        async with self._sessionmaker() as session:
+            row = await session.get(ProductRow, product_id)
+            if row is None:
+                return None
+            return to_domain(row, [])
+
     async def get_active(self, product_id: int) -> Product | None:
         async with self._sessionmaker() as session:
             row = await session.get(ProductRow, product_id)

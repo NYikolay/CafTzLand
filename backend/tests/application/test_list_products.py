@@ -9,6 +9,9 @@ class FakeProductRepository:
     async def get_active(self, product_id: int) -> Product | None:
         return None
 
+    async def get(self, product_id: int) -> Product | None:
+        return None
+
     async def list_active(self) -> list[Product]:
         return self._products
 

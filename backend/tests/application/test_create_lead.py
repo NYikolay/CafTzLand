@@ -50,6 +50,9 @@ class FakeProductRepository:
             variants=[],
         )
 
+    async def get(self, product_id: int) -> Product | None:
+        return None
+
     async def list_active(self) -> list[Product]:
         return []
 
