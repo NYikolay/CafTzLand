@@ -70,3 +70,27 @@ def test_lead_dedup_window_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
         admin_password="test-admin-pass",
     )
     assert settings.lead_dedup_window_minutes == 5
+
+
+def test_telegram_bot_token_defaults_to_none() -> None:
+    assert make_settings().telegram_bot_token is None
+
+
+def test_telegram_bot_token_empty_env_means_disabled(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "")
+    settings = Settings(
+        _env_file=None,
+        secret_key="test-secret-key-0123456789abcdef",
+        admin_password="test-admin-pass",
+    )
+    assert settings.telegram_bot_token is None
+
+
+def test_telegram_bot_token_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "123456:ABC-DEF")
+    settings = Settings(
+        _env_file=None,
+        secret_key="test-secret-key-0123456789abcdef",
+        admin_password="test-admin-pass",
+    )
+    assert settings.telegram_bot_token == "123456:ABC-DEF"

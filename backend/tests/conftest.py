@@ -27,6 +27,7 @@ ENV_NAMES = [
     "LOG_LEVEL",
     "SQL_ECHO",
     "LEAD_DEDUP_WINDOW_MINUTES",
+    "TELEGRAM_BOT_TOKEN",
 ]
 
 

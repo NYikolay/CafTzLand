@@ -1,7 +1,8 @@
 from enum import StrEnum
 from functools import lru_cache
+from typing import Any
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
@@ -40,6 +41,14 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     sql_echo: bool = False
     lead_dedup_window_minutes: int = Field(default=10, ge=1, le=1440)
+    telegram_bot_token: str | None = None
+
+    @field_validator("telegram_bot_token", mode="before")
+    @classmethod
+    def _blank_telegram_token_to_none(cls, value: Any) -> Any:
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
 
     @property
     def database_url(self) -> str:
