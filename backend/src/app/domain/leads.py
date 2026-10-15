@@ -8,6 +8,23 @@ class Interest(StrEnum):
     QUESTION = "question"
 
 
+class InterestName(StrEnum):
+    SUBSCRIPTION = "Подписка"
+    ONE_TIME = "Разовый заказ"
+    QUESTION = "Вопрос"
+
+
+INTEREST_NAMES: dict[Interest, InterestName] = {
+    Interest.SUBSCRIPTION: InterestName.SUBSCRIPTION,
+    Interest.ONE_TIME: InterestName.ONE_TIME,
+    Interest.QUESTION: InterestName.QUESTION,
+}
+
+INTEREST_BY_NAME: dict[InterestName, Interest] = {
+    name: interest for interest, name in INTEREST_NAMES.items()
+}
+
+
 @dataclass(frozen=True, slots=True)
 class LeadSource:
     utm_source: str | None = None

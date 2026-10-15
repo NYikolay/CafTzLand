@@ -1,8 +1,32 @@
-from app.domain.leads import Interest, Lead, LeadSource
+from app.domain.leads import (
+    INTEREST_BY_NAME,
+    INTEREST_NAMES,
+    Interest,
+    InterestName,
+    Lead,
+    LeadSource,
+)
 
 
 def test_interest_values() -> None:
     assert [interest.value for interest in Interest] == ["subscription", "one_time", "question"]
+
+
+def test_interest_name_values() -> None:
+    assert [name.value for name in InterestName] == ["Подписка", "Разовый заказ", "Вопрос"]
+
+
+def test_interest_names_map_codes_to_russian() -> None:
+    assert INTEREST_NAMES == {
+        Interest.SUBSCRIPTION: InterestName.SUBSCRIPTION,
+        Interest.ONE_TIME: InterestName.ONE_TIME,
+        Interest.QUESTION: InterestName.QUESTION,
+    }
+
+
+def test_interest_by_name_is_reverse_map() -> None:
+    for interest, name in INTEREST_NAMES.items():
+        assert INTEREST_BY_NAME[name] is interest
 
 
 def test_lead_source_defaults_to_nulls() -> None:
