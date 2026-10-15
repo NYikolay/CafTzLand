@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
+  "mcp": {
+    "figma-linux-next": {
+      "type": "remote",
+      "url": "http://127.0.0.1:3845/mcp"
+    }
+  }
+}

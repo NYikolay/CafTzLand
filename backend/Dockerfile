@@ -3,41 +3,36 @@
 # ============================================================
 # Stage: builder — общая база с зависимостями и исходниками
 # ============================================================
-FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim AS builder
+FROM python:3.14-slim-bookworm AS builder
 
-ENV UV_COMPILE_BYTECODE=1 \
-    UV_LINK_MODE=copy \
-    UV_PYTHON_DOWNLOADS=never
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_NO_INTERACTION=1
 
 WORKDIR /app
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-dev --group prod --no-install-project
+RUN pip install --no-cache-dir "poetry==2.5.1"
 
-COPY pyproject.toml uv.lock README.md ./
+COPY pyproject.toml poetry.lock ./
+
+RUN --mount=type=cache,target=/root/.cache \
+    poetry install --only main --no-root
+
 COPY src ./src
 COPY alembic.ini ./
 COPY alembic ./alembic
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --group prod
+RUN --mount=type=cache,target=/root/.cache \
+    poetry install --only main
 
 # ============================================================
 # Stage: dev — для локальной разработки с hot-reload
 # ============================================================
 FROM builder AS dev
 
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PATH="/app/.venv/bin:$PATH" \
+ENV PATH="/app/.venv/bin:$PATH" \
     APP_ENV=local
-
-WORKDIR /app
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --group dev --group prod
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
@@ -46,6 +41,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         iputils-ping \
         vim \
     && rm -rf /var/lib/apt/lists/*
+
+RUN --mount=type=cache,target=/root/.cache \
+    poetry install --with dev
+
+WORKDIR /app
 
 EXPOSE 8000
 

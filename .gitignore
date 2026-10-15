@@ -1,0 +1,8 @@
+.env
+.env.prod
+nginx/certs/*.pem
+nginx/certs/*.key
+nginx/certs/*.crt
+.idea
+docs/
+graphify-out/
