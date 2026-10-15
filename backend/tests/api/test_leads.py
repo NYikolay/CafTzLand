@@ -119,6 +119,42 @@ async def test_source_empty_values_are_dropped(app: FastAPI, client: AsyncClient
     assert use_case.calls[0].source == LeadSource(utm_medium="cpc")
 
 
+async def test_source_value_truncated_to_column_width(app: FastAPI, client: AsyncClient) -> None:
+    use_case = FakeCreateLead()
+    override(app, use_case)
+    payload = {**VALID_PAYLOAD, "source": {"utm_source": "x" * 300}}
+
+    response = await client.post("/api/v1/lead", json=payload)
+
+    assert response.status_code == 201
+    source = use_case.calls[0].source
+    assert source is not None
+    assert source.utm_source == "x" * 255
+
+
+async def test_extra_source_value_keeps_default_limit(app: FastAPI, client: AsyncClient) -> None:
+    use_case = FakeCreateLead()
+    override(app, use_case)
+    payload = {**VALID_PAYLOAD, "source": {"gclid": "y" * 1100}}
+
+    response = await client.post("/api/v1/lead", json=payload)
+
+    assert response.status_code == 201
+    source = use_case.calls[0].source
+    assert source is not None
+    assert source.extra["gclid"] == "y" * 1024
+
+
+async def test_source_with_non_dict_value_rejected(app: FastAPI, client: AsyncClient) -> None:
+    override(app, FakeCreateLead())
+    payload = {**VALID_PAYLOAD, "source": 5}
+
+    response = await client.post("/api/v1/lead", json=payload)
+
+    assert response.status_code == 422
+    assert response.json()["error"]["details"][0]["msg"] == "Некорректный параметр источника"
+
+
 async def test_unavailable_product_returns_validation_error(
     app: FastAPI, client: AsyncClient
 ) -> None:

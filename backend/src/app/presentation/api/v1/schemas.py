@@ -14,9 +14,16 @@ logger = logging.getLogger(__name__)
 PHONE_INVALID_MESSAGE = "Пожалуйста, введите корректный номер телефона"
 SOURCE_INVALID_MESSAGE = "Некорректный параметр источника"
 MAX_SOURCE_VALUE_LENGTH = 1024
-KNOWN_SOURCE_KEYS = frozenset(
-    {"utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "referrer", "page_url"}
-)
+SOURCE_KEY_MAX_LENGTHS: dict[str, int] = {
+    "utm_source": 255,
+    "utm_medium": 255,
+    "utm_campaign": 255,
+    "utm_content": 255,
+    "utm_term": 255,
+    "referrer": 1024,
+    "page_url": 1024,
+}
+KNOWN_SOURCE_KEYS = frozenset(SOURCE_KEY_MAX_LENGTHS)
 
 
 class LeadCreateRequest(BaseModel):
@@ -51,11 +58,10 @@ class LeadCreateRequest(BaseModel):
             stripped = raw.strip()
             if not stripped:
                 continue
-            if len(stripped) > MAX_SOURCE_VALUE_LENGTH:
-                logger.warning(
-                    "Source value for %r truncated to %d chars", key, MAX_SOURCE_VALUE_LENGTH
-                )
-                stripped = stripped[:MAX_SOURCE_VALUE_LENGTH]
+            limit = SOURCE_KEY_MAX_LENGTHS.get(key, MAX_SOURCE_VALUE_LENGTH)
+            if len(stripped) > limit:
+                logger.warning("Source value for %r truncated to %d chars", key, limit)
+                stripped = stripped[:limit]
             cleaned[key] = stripped
         return cleaned
 
