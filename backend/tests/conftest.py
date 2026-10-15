@@ -1,6 +1,13 @@
-import pytest
+from collections.abc import AsyncIterator
 
+import pytest
+from fastapi import FastAPI
+from httpx import ASGITransport, AsyncClient
+
+from app.application.health.check_readiness import CheckReadiness
 from app.infrastructure.config.settings import Settings
+from app.main import create_app
+from app.presentation.dependencies import get_readiness_check
 
 ENV_NAMES = [
     "APP_ENV",
@@ -22,6 +29,14 @@ ENV_NAMES = [
 ]
 
 
+class FakeProbe:
+    def __init__(self, *, healthy: bool) -> None:
+        self._healthy = healthy
+
+    async def ping(self) -> bool:
+        return self._healthy
+
+
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch: pytest.MonkeyPatch) -> None:
     for name in ENV_NAMES:
@@ -38,3 +53,19 @@ def test_settings() -> Settings:
         allowed_hosts=["testserver", "localhost"],
         cors_origins=["http://frontend.test"],
     )
+
+
+@pytest.fixture
+def app(test_settings: Settings) -> FastAPI:
+    application = create_app(test_settings)
+    application.dependency_overrides[get_readiness_check] = lambda: CheckReadiness(
+        FakeProbe(healthy=True)
+    )
+    return application
+
+
+@pytest.fixture
+async def client(app: FastAPI) -> AsyncIterator[AsyncClient]:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        yield client
