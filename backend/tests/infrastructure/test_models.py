@@ -1,6 +1,6 @@
 from typing import cast
 
-from sqlalchemy import Table
+from sqlalchemy import CheckConstraint, String, Table
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.infrastructure.db.models import Order, Product, ProductVariant
@@ -25,6 +25,30 @@ def test_variant_unique_constraint() -> None:
 def test_order_check_constraints() -> None:
     names = {constraint.name for constraint in cast(Table, Order.__table__).constraints}
     assert "ck_orders_interest_allowed" in names
+
+
+def test_order_interest_constraint_allows_russian_names() -> None:
+    table = cast(Table, Order.__table__)
+    constraint = cast(
+        CheckConstraint,
+        next(
+            constraint
+            for constraint in table.constraints
+            if constraint.name == "ck_orders_interest_allowed"
+        ),
+    )
+    sql = str(constraint.sqltext)
+
+    assert "'Подписка'" in sql
+    assert "'Разовый заказ'" in sql
+    assert "'Вопрос'" in sql
+
+
+def test_order_interest_column_width() -> None:
+    column_type = cast(Table, Order.__table__).c.interest.type
+
+    assert isinstance(column_type, String)
+    assert column_type.length == 30
 
 
 def test_source_extra_is_jsonb() -> None:

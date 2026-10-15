@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from app.domain.leads import Interest, Lead, LeadSource
+from app.domain.leads import INTEREST_BY_NAME, INTEREST_NAMES, InterestName, Lead, LeadSource
 from app.infrastructure.db.models.order import Order
 
 
@@ -27,7 +27,7 @@ class SqlAlchemyLeadRepository:
                 return to_domain(recent), True
             row = Order(
                 name=lead.name,
-                interest=lead.interest.value,
+                interest=INTEREST_NAMES[lead.interest].value,
                 phone_number=lead.phone_number,
                 product_id=lead.product_id,
                 comment=lead.comment,
@@ -50,7 +50,7 @@ def to_domain(order: Order) -> Lead:
     return Lead(
         name=order.name,
         phone_number=order.phone_number,
-        interest=Interest(order.interest),
+        interest=INTEREST_BY_NAME[InterestName(order.interest)],
         product_id=order.product_id,
         comment=order.comment,
         source=_source_to_domain(order),

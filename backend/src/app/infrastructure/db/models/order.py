@@ -23,7 +23,7 @@ class Order(Base):
     __tablename__ = "orders"
     __table_args__ = (
         CheckConstraint(
-            "interest IN ('subscription', 'one_time', 'question')",
+            "interest IN ('Подписка', 'Разовый заказ', 'Вопрос')",
             name="interest_allowed",
         ),
         Index("ix_orders_phone_number_created_at", "phone_number", "created_at"),
@@ -32,7 +32,7 @@ class Order(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, Identity(), primary_key=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
-    interest: Mapped[str] = mapped_column(String(20), nullable=False)
+    interest: Mapped[str] = mapped_column(String(30), nullable=False)
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False)
     product_id: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("products.id", ondelete="SET NULL")
