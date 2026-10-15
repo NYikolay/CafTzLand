@@ -1,3 +1,4 @@
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -7,13 +8,17 @@ from sqladmin import Admin
 from app.infrastructure.config.settings import AppEnv, Settings, get_settings
 from app.infrastructure.db.session import create_db_engine, create_sessionmaker
 from app.infrastructure.logging import configure_logging
+from app.infrastructure.telegram.notifier import create_telegram_bot
 from app.presentation.admin.auth import AdminAuthBackend
 from app.presentation.admin.orders import OrderAdmin
 from app.presentation.admin.products import ProductAdmin, ProductVariantAdmin
+from app.presentation.admin.subscribers import TelegramSubscriberAdmin
 from app.presentation.api import health
 from app.presentation.api.v1 import router as api_v1_router
 from app.presentation.errors import register_exception_handlers
 from app.presentation.middlewares import register_middlewares
+
+logger = logging.getLogger(__name__)
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -22,12 +27,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     engine = create_db_engine(app_settings)
     sessionmaker = create_sessionmaker(engine)
+    telegram_bot = create_telegram_bot(app_settings.telegram_bot_token)
+    if telegram_bot is None:
+        logger.warning("TELEGRAM_BOT_TOKEN is not set — telegram lead notifications are disabled")
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         try:
             yield
         finally:
+            if telegram_bot is not None:
+                await telegram_bot.session.close()
             await engine.dispose()
 
     app = FastAPI(
@@ -40,6 +50,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = app_settings
     app.state.db_engine = engine
     app.state.sessionmaker = sessionmaker
+    app.state.telegram_bot = telegram_bot
 
     register_middlewares(app, app_settings)
 
@@ -57,6 +68,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     admin.add_view(OrderAdmin)
     admin.add_view(ProductAdmin)
     admin.add_view(ProductVariantAdmin)
+    admin.add_view(TelegramSubscriberAdmin)
 
     app.include_router(health.router)
     app.include_router(api_v1_router)

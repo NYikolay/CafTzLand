@@ -5,6 +5,7 @@ ADMIN_LISTS = [
     "/admin/order/list",
     "/admin/product/list",
     "/admin/product-variant/list",
+    "/admin/telegram-subscriber/list",
 ]
 
 

@@ -5,9 +5,10 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 
 from app.application.leads.create_lead import PRODUCT_UNAVAILABLE_MESSAGE, CreateLeadResult
+from app.application.telegram.notify_new_lead import NotifyLeadResult
 from app.domain.exceptions import ValidationError
 from app.domain.leads import Interest, Lead, LeadSource
-from app.presentation.dependencies import get_create_lead
+from app.presentation.dependencies import get_create_lead, get_notify_new_lead
 
 VALID_PAYLOAD: dict[str, Any] = {
     "name": "Иван",
@@ -36,6 +37,15 @@ class FakeCreateLead:
         if self._error is not None:
             raise self._error
         return CreateLeadResult(lead=replace(lead, id=42), duplicate=self._duplicate)
+
+
+class FakeNotifyNewLead:
+    def __init__(self) -> None:
+        self.calls: list[Lead] = []
+
+    async def __call__(self, lead: Lead) -> NotifyLeadResult:
+        self.calls.append(lead)
+        return NotifyLeadResult(total=0, sent=0, failed=0, deactivated=0)
 
 
 def override(app: FastAPI, use_case: FakeCreateLead) -> None:
@@ -166,3 +176,25 @@ async def test_unavailable_product_returns_validation_error(
     error = response.json()["error"]
     assert error["code"] == "validation_error"
     assert error["message"] == PRODUCT_UNAVAILABLE_MESSAGE
+
+
+async def test_new_lead_schedules_notification(app: FastAPI, client: AsyncClient) -> None:
+    override(app, FakeCreateLead())
+    notify = FakeNotifyNewLead()
+    app.dependency_overrides[get_notify_new_lead] = lambda: notify
+
+    response = await client.post("/api/v1/lead", json=VALID_PAYLOAD)
+
+    assert response.status_code == 201
+    assert [lead.id for lead in notify.calls] == [42]
+
+
+async def test_duplicate_lead_does_not_notify(app: FastAPI, client: AsyncClient) -> None:
+    override(app, FakeCreateLead(duplicate=True))
+    notify = FakeNotifyNewLead()
+    app.dependency_overrides[get_notify_new_lead] = lambda: notify
+
+    response = await client.post("/api/v1/lead", json=VALID_PAYLOAD)
+
+    assert response.status_code == 200
+    assert notify.calls == []
