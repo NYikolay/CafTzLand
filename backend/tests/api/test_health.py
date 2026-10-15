@@ -19,9 +19,7 @@ async def test_ready_when_database_up(client: AsyncClient) -> None:
 
 
 async def test_ready_when_database_down(app: FastAPI, client: AsyncClient) -> None:
-    app.dependency_overrides[get_readiness_check] = lambda: CheckReadiness(
-        FakeProbe(healthy=False)
-    )
+    app.dependency_overrides[get_readiness_check] = lambda: CheckReadiness(FakeProbe(healthy=False))
     response = await client.get("/health/ready")
     assert response.status_code == 503
     assert response.json() == {"status": "unavailable", "database": "down"}
