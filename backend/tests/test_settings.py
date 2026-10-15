@@ -46,3 +46,27 @@ def test_short_secret_key_rejected() -> None:
 def test_short_admin_password_rejected() -> None:
     with pytest.raises(ValidationError):
         make_settings(admin_password="short")
+
+
+def test_lead_dedup_window_default() -> None:
+    assert make_settings().lead_dedup_window_minutes == 10
+
+
+def test_lead_dedup_window_rejects_zero() -> None:
+    with pytest.raises(ValidationError):
+        make_settings(lead_dedup_window_minutes=0)
+
+
+def test_lead_dedup_window_rejects_over_a_day() -> None:
+    with pytest.raises(ValidationError):
+        make_settings(lead_dedup_window_minutes=1441)
+
+
+def test_lead_dedup_window_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LEAD_DEDUP_WINDOW_MINUTES", "5")
+    settings = Settings(
+        _env_file=None,
+        secret_key="test-secret-key-0123456789abcdef",
+        admin_password="test-admin-pass",
+    )
+    assert settings.lead_dedup_window_minutes == 5

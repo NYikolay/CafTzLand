@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     enable_docs: bool | None = None
     log_level: str = "INFO"
     sql_echo: bool = False
+    lead_dedup_window_minutes: int = Field(default=10, ge=1, le=1440)
 
     @property
     def database_url(self) -> str:

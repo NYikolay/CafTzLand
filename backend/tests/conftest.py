@@ -26,6 +26,7 @@ ENV_NAMES = [
     "ENABLE_DOCS",
     "LOG_LEVEL",
     "SQL_ECHO",
+    "LEAD_DEDUP_WINDOW_MINUTES",
 ]
 
 
