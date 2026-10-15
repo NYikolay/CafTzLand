@@ -3,7 +3,7 @@ from typing import cast
 from sqlalchemy import CheckConstraint, String, Table
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.infrastructure.db.models import Order, Product, ProductVariant
+from app.infrastructure.db.models import Order, Product, ProductVariant, TelegramSubscriber
 
 
 def test_table_names() -> None:
@@ -58,3 +58,18 @@ def test_source_extra_is_jsonb() -> None:
 def test_order_product_fk_sets_null() -> None:
     fk = next(iter(Order.__table__.c.product_id.foreign_keys))
     assert fk.ondelete == "SET NULL"
+
+
+def test_telegram_subscriber_table_name() -> None:
+    assert cast(Table, TelegramSubscriber.__table__).name == "telegram_subscribers"
+
+
+def test_telegram_subscriber_unique_user_id() -> None:
+    names = {
+        constraint.name for constraint in cast(Table, TelegramSubscriber.__table__).constraints
+    }
+    assert "uq_telegram_subscribers_telegram_user_id" in names
+
+
+def test_telegram_subscriber_active_has_server_default() -> None:
+    assert TelegramSubscriber.__table__.c.is_active.server_default is not None
