@@ -15,3 +15,8 @@ class NotFoundError(DomainError):
 class ConflictError(DomainError):
     code = "conflict"
     status_code = 409
+
+
+class ValidationError(DomainError):
+    code = "validation_error"
+    status_code = 422
