@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from httpx import ASGITransport, AsyncClient
 
 from app.domain.exceptions import NotFoundError
@@ -26,6 +26,17 @@ async def test_validation_error_envelope(app: FastAPI, client: AsyncClient) -> N
     body = response.json()
     assert body["error"]["code"] == "validation_error"
     assert isinstance(body["error"]["details"], list)
+
+
+async def test_http_exception_preserves_headers(app: FastAPI, client: AsyncClient) -> None:
+    @app.get("/_test/method-not-allowed")
+    async def method_not_allowed() -> None:
+        raise HTTPException(status_code=405, headers={"Allow": "GET"})
+
+    response = await client.get("/_test/method-not-allowed")
+    assert response.status_code == 405
+    assert response.json()["error"]["code"] == "http_405"
+    assert response.headers["Allow"] == "GET"
 
 
 async def test_unknown_route_envelope(client: AsyncClient) -> None:

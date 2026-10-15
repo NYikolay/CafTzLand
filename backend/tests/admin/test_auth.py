@@ -15,6 +15,14 @@ async def test_admin_login_rejects_wrong_credentials(client: AsyncClient) -> Non
     assert response.status_code == 400
 
 
+async def test_admin_login_rejects_non_ascii_credentials(client: AsyncClient) -> None:
+    response = await client.post(
+        "/admin/login",
+        data={"username": "café", "password": "pässwörd123"},
+    )
+    assert response.status_code == 400
+
+
 async def test_admin_login_and_logout(client: AsyncClient) -> None:
     response = await client.post(
         "/admin/login",

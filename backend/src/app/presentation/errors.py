@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Mapping
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -18,11 +19,12 @@ def error_response(
     message: str,
     *,
     details: Any = None,
+    headers: Mapping[str, str] | None = None,
 ) -> JSONResponse:
     error: dict[str, Any] = {"code": code, "message": message}
     if details is not None:
         error["details"] = details
-    return JSONResponse(status_code=status_code, content={"error": error})
+    return JSONResponse(status_code=status_code, content={"error": error}, headers=headers)
 
 
 def register_exception_handlers(app: FastAPI, *, expose_details: bool) -> None:
@@ -44,7 +46,9 @@ def register_exception_handlers(app: FastAPI, *, expose_details: bool) -> None:
     @app.exception_handler(StarletteHTTPException)
     async def handle_http_exception(request: Request, exc: StarletteHTTPException) -> JSONResponse:
         message = exc.detail if isinstance(exc.detail, str) else "HTTP error"
-        return error_response(exc.status_code, f"http_{exc.status_code}", message)
+        return error_response(
+            exc.status_code, f"http_{exc.status_code}", message, headers=exc.headers
+        )
 
     @app.exception_handler(Exception)
     async def handle_unexpected_error(request: Request, exc: Exception) -> JSONResponse:
