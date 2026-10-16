@@ -171,18 +171,29 @@ export function LeadForm({ products, options }: LeadFormProps) {
           label="Какой кофе желаете?"
           error={errors.product_id?.message}
         >
-          <select
-            id="lead-coffee"
-            {...register("product_id")}
-            className="h-12 w-full rounded-[3px] cursor-pointer border border-line bg-paper px-4 text-sm outline-none focus:border-accent"
-          >
-            <option value="">Помогите выбрать</option>
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-full">
+            <select
+                id="lead-coffee"
+                {...register("product_id")}
+                className="appearance-none h-12 w-full rounded-[3px] cursor-pointer border border-line bg-paper pl-4 pr-10 text-sm outline-none focus:border-accent"
+            >
+              <option value="">Помогите выбрать</option>
+              {products.map((product) => (
+                  <option key={product.id} value={product.id}>
+                    {product.name}
+                  </option>
+              ))}
+            </select>
+            <svg
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </Field>
       </div>
 

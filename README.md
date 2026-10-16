@@ -29,44 +29,13 @@
 
 Ошибок как таковых агент не допускал, проект всегда запускался с первого раза. Благодаря SDD и TDD агент чётко понимает что ему делать, сам себя ревьюит и задаёт вопросы когда чего-то не понимает. Количество ошибок минимально, главное чётко описать задачу  
 Чтобы реализовать такой простой backend было достаточно дать агенту посмотреть дизайн и пару наводящих фактов.
+Были небольшие проблемы с вёрсткой (цвет не тот подхватил, неверно расположил пару элементов). Фиксанул в следующей задаче
 
-## Деплой (production)
 
-Требуется: Docker + Compose на сервере, DNS A-записи `tzkvvit.site` и `www.tzkvvit.site` → IP сервера.
+**Ссылка на сайт:** https://tzkvvit.site
+**Админ панель:** https://tzkvvit.site/admin
+**Бот:** @vitai_world_kwarta_bot
 
-```bash
-# 1. Окружение
-cp .env.prod.example .env.prod   # заполнить секреты: openssl rand -hex 32
-
-# 2. Сборка и запуск (проект kvarta-prod)
-docker compose --env-file .env.prod -f compose.prod.yaml up -d --build --wait
-docker compose --env-file .env.prod -f compose.prod.yaml ps
-docker compose --env-file .env.prod -f compose.prod.yaml logs -f backend
-
-# 3. Первый сертификат Let's Encrypt (заменить <email>; nginx уже слушает :80)
-docker compose --env-file .env.prod -f compose.prod.yaml run --rm --entrypoint certbot certbot \
-  certonly --webroot -w /var/www/certbot \
-  -d tzkvvit.site -d www.tzkvvit.site \
-  --email <email> --agree-tos --no-eff-email
-
-# 4. SSL: добавить 443 server-блок в nginx/default.conf
-#    (ssl_certificate /etc/letsencrypt/live/tzkvvit.site/fullchain.pem;
-#     proxy_pass http://frontend:3000 — включая /api/lead: BFF сам проксирует
-#     в backend внутри сети; напрямую API — только /api/v1/ → http://backend:8000)
-docker compose --env-file .env.prod -f compose.prod.yaml exec nginx nginx -s reload
-
-# Остановка (тома с данными сохраняются)
-docker compose --env-file .env.prod -f compose.prod.yaml down
-```
-
-- `NEXT_PUBLIC_SITE_URL` инлайнится в HTML на этапе сборки: смена домена требует пересборки frontend.
-- Сервис `certbot` обновляет сертификаты каждые 12 часов, но nginx нужно перезагрузить, чтобы он подхватил новый сертификат: `docker compose --env-file .env.prod -f compose.prod.yaml exec nginx nginx -s reload` (например, из cron раз в неделю).
-- Dev-стек: `cp backend/.env.example backend/.env` (заполнить креды) и `docker compose up -d --build` (порт frontend — 3000, backend — 8000).
-
-**Ссылка на сайт:** ...  
-**Админ панель:** ...  
-**Бот:** ...
-
-**Пароль и логин от админки:** ....
+**Пароль и логин от админки:** adwnsmtst | CntTMAYk1VIc0YyE/WEQXPmcR04AEhWx
 
 Ссылка на пример моего prod проекта - [https://миноксидил.бел/](https://миноксидил.бел/). Также был собран по большей части агентом за пару дней
