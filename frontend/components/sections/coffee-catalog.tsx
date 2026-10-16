@@ -12,7 +12,7 @@ export async function CoffeeCatalog() {
       <Container>
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start lg:gap-[100px]">
           <div className="flex flex-col gap-6">
-            <Eyebrow>02 / Ассортимент Кварты</Eyebrow>
+            <Eyebrow className="text-accent-deep">02 / Ассортимент Кварты</Eyebrow>
             <h2
               id="coffee-heading"
               className="font-serif text-[clamp(36px,5vw,56px)] leading-[1.1] tracking-[-0.032em]"

@@ -13,7 +13,7 @@ export function WorkshopSection() {
       <Container>
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-20">
           <div className="flex flex-col gap-8">
-            <Eyebrow>01 / Маленькая мастерская Кварты</Eyebrow>
+            <Eyebrow className="text-accent-deep">01 / Маленькая мастерская Кварты</Eyebrow>
             <h2
               id="workshop-heading"
               className="font-serif text-[clamp(34px,4.6vw,53px)] leading-[1.13] tracking-[-0.03em]"

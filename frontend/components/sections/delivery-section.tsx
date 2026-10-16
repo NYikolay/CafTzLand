@@ -18,7 +18,7 @@ export function DeliverySection() {
   return (
     <section id="delivery" aria-labelledby="delivery-heading" className="py-14 lg:py-[72px]">
       <Container>
-        <Eyebrow>04 / Как получить кофе</Eyebrow>
+        <Eyebrow className="text-accent-deep">04 / Как получить кофе</Eyebrow>
         <h2
           id="delivery-heading"
           className="mt-5 max-w-[720px] font-serif text-[clamp(34px,4.6vw,53px)] leading-[1.13] tracking-[-0.03em]"
@@ -28,7 +28,7 @@ export function DeliverySection() {
         <div className="mt-10 grid gap-8 md:grid-cols-2 md:divide-x md:divide-line">
           {OPTIONS.map((option) => (
             <div key={option.label} className="flex flex-col gap-3 md:px-8 md:first:pl-0">
-              <p className="font-mono text-[11px] uppercase tracking-[1px] text-accent">
+              <p className="font-mono text-[11px] uppercase tracking-[1px] text-accent-deep">
                 {option.label}
               </p>
               <p className="font-serif text-2xl">{option.title}</p>

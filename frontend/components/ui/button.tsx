@@ -9,7 +9,7 @@ const base =
 const variants: Record<ButtonVariant, string> = {
   accent: "bg-accent text-paper hover:bg-[#b23f26]",
   outline: "border border-ink/30 text-ink hover:border-ink",
-  cream: "bg-cream text-accent hover:bg-paper",
+  cream: "bg-cream text-accent-deep hover:bg-paper",
 };
 
 type ButtonProps = ComponentProps<"button"> & { variant?: ButtonVariant };
