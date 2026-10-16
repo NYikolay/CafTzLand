@@ -24,8 +24,8 @@ export async function LeadSection() {
               <br />
               ваш кофе.
             </h2>
-            <p className="max-w-[520px] text-base leading-relaxed text-cream/80">
-              Оставьте имя и телефон. Заказ оформим во время звонка — без корзины и онлайн-оплаты.
+            <p className="max-w-130 text-base leading-relaxed text-cream/80">
+              Оставьте имя и телефон. Заказ оформим во время звонка.
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <p className="font-mono text-[11px] uppercase tracking-[1px] text-cream/60">

@@ -80,13 +80,13 @@ export function LeadForm({ products, options }: LeadFormProps) {
       }
 
       if (interpreted.status === "created") {
-        toast.success("Спасибо! Заявка отправлена — менеджер перезвонит.");
+        toast.success("Спасибо! Заявка отправлена — менеджер Вам перезвонит");
         reset();
         return;
       }
 
       if (interpreted.status === "duplicate") {
-        toast.success("Заявка уже отправлена — менеджер перезвонит.");
+        toast.success("Ваша зявка уже была получена, пожалуйста, ожидайте - менеджер Вам перезвонит");
         reset();
         return;
       }
@@ -124,7 +124,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
       </fieldset>
 
       <div className="grid gap-5">
-        <Field id="lead-name" label="Ваше имя" error={errors.name?.message}>
+        <Field id="lead-name" label="Ваше имя *" error={errors.name?.message}>
           <input
             id="lead-name"
             {...register("name")}
@@ -135,7 +135,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
           />
         </Field>
 
-        <Field id="lead-phone" label="Телефон" error={errors.phone_number?.message}>
+        <Field id="lead-phone" label="Телефон *" error={errors.phone_number?.message}>
           <input
             id="lead-phone"
             type="tel"
@@ -168,13 +168,13 @@ export function LeadForm({ products, options }: LeadFormProps) {
 
         <Field
           id="lead-coffee"
-          label="Какой кофе? Необязательно"
+          label="Какой кофе желаете?"
           error={errors.product_id?.message}
         >
           <select
             id="lead-coffee"
             {...register("product_id")}
-            className="h-12 w-full rounded-[3px] border border-line bg-paper px-4 text-sm outline-none focus:border-accent"
+            className="h-12 w-full rounded-[3px] cursor-pointer border border-line bg-paper px-4 text-sm outline-none focus:border-accent"
           >
             <option value="">Помогите выбрать</option>
             {products.map((product) => (

@@ -47,14 +47,13 @@ export function HeroSection() {
               className="h-auto w-full object-cover"
             />
             <div className="absolute bottom-4 left-4 flex items-stretch gap-3">
-              <div className="bg-paper px-4 py-3 shadow-sm">
+              <div className="bg-cream px-4.5 py-4.5">
                 <p className="font-mono text-[10px] uppercase tracking-[1px] text-muted">
                   Партия недели
                 </p>
-                <p className="mt-1 font-serif text-3xl">5 кг / ЧТ</p>
-              </div>
-              <div className="self-end bg-accent px-4 py-3 shadow-sm">
-                <p className="font-mono text-[10px] uppercase tracking-[1px] text-paper">
+                <p className="mt-2 font-serif text-3xl">5 кг / ЧТ</p>
+                <div className={"h-[1px] bg-line my-2"}></div>
+                <p className="font-mono text-[10px] text-accent uppercase tracking-[1px]">
                   Обжарено в Кварте
                 </p>
               </div>

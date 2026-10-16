@@ -17,7 +17,7 @@ export function SubscriptionSection() {
               Пусть кофе <em className="italic">не кончается.</em>
             </h2>
             <p className="max-w-[520px] text-base leading-relaxed text-paper">
-              Один раз договариваемся о кофе и количестве. Дальше в неделе появляется приятная
+              Один раз договариваемся о кофе и количестве. Дальше в месяце появляется приятная
               постоянная — свежая обжарка для дома или офиса.
             </p>
             <p className="max-w-[520px] text-base leading-relaxed text-paper">
@@ -36,8 +36,8 @@ export function SubscriptionSection() {
               sizes="(min-width: 1024px) 620px, 100vw"
               className="h-auto w-full object-cover"
             />
-            <div className="absolute bottom-6 left-6 w-[260px] bg-cream p-5">
-              <div className="flex items-center justify-between border-b border-line pb-2 font-mono text-[10px] uppercase tracking-[1px] text-muted">
+            <div className="absolute bottom-6 left-6 bg-cream p-5.5">
+              <div className="flex items-center justify-between pb-2 font-mono text-[10px] uppercase tracking-[1px] text-accent">
                 <span>Набор Кварты</span>
                 <span>Кварта</span>
               </div>
@@ -45,6 +45,7 @@ export function SubscriptionSection() {
               <p className="mt-2 font-mono text-[10px] uppercase tracking-[1px] text-muted">
                 2 × 250 г раз в месяц
               </p>
+              <div className={"bg-line h-[1px] mt-3"}></div>
               <p className="mt-3 font-serif text-[34px] leading-none">54 BYN / мес</p>
               <p className="mt-2 text-[11px] leading-snug text-muted">
                 За набор. Стоимость доставки - бесплатно.

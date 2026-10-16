@@ -16,7 +16,7 @@ export function CoffeeOrderButton({
     <button
       type="button"
       onClick={() => selectCoffee(productId)}
-      className="inline-flex items-center gap-1 text-sm font-semibold text-accent-deep underline-offset-4 hover:underline"
+      className="inline-flex items-center gap-1 text-sm font-semibold text-accent-deep cursor-pointer underline-offset-4 hover:underline"
     >
       {children}
       <ArrowUpRightIcon />

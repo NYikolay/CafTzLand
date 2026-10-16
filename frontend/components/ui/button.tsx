@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 export type ButtonVariant = "accent" | "outline" | "cream";
 
 const base =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-[3px] px-[18px] text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "inline-flex h-11 items-center justify-center gap-2 rounded-[3px] px-[18px] cursor-pointer text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 const variants: Record<ButtonVariant, string> = {
   accent: "bg-accent text-paper hover:bg-[#b23f26]",

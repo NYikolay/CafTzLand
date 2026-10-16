@@ -3,12 +3,12 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 
 const OPTIONS = [
   {
-    label: "01 / По Минску",
+    label: "Доставка по Минску",
     title: "Каждую пятницу",
     text: "От 50 BYN — бесплатно. Если заказ меньше, стоимость доставки уточнит менеджер при звонке.",
   },
   {
-    label: "02 / Из мастерской Кварты",
+    label: "Из мастерской Кварты",
     title: "ул. Короля, 9",
     text: "Минск. Заходите за своим кофе. пн–пт 8:00–20:00 сб–вс 10:00–18:00",
   },
@@ -23,7 +23,8 @@ export function DeliverySection() {
           id="delivery-heading"
           className="mt-5 max-w-[720px] font-serif text-[clamp(34px,4.6vw,53px)] leading-[1.13] tracking-[-0.03em]"
         >
-          В пятницу — к вам. В остальные дни — к нам.
+          В пятницу — к вам.
+          В остальные дни — к нам.
         </h2>
         <div className="mt-10 grid gap-8 md:grid-cols-2 md:divide-x md:divide-line">
           {OPTIONS.map((option) => (

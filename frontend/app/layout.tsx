@@ -25,7 +25,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kvarta.by";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tzkvvit.site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

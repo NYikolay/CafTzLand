@@ -7,9 +7,9 @@ const theme = {
   "--normal-bg": "var(--color-ink)",
   "--normal-text": "var(--color-cream)",
   "--normal-border": "color-mix(in srgb, var(--color-cream) 15%, transparent)",
-  "--success-bg": "var(--color-ink)",
-  "--success-text": "var(--color-cream)",
-  "--success-border": "color-mix(in srgb, var(--color-cream) 15%, transparent)",
+  "--success-bg": "var(--color-cream)",
+  "--success-text": "var(--color-ink)",
+  "--success-border": "var(--color-line)",
   "--error-bg": "var(--color-accent-deep)",
   "--error-text": "var(--color-paper)",
   "--error-border": "color-mix(in srgb, var(--color-paper) 25%, transparent)",
@@ -24,7 +24,7 @@ export function Toaster() {
       mobileOffset={16}
       duration={5000}
       richColors
-      toastOptions={{ classNames: { toast: "font-sans" } }}
+      toastOptions={{ classNames: { toast: "font-sans", success: '[&_[data-icon]]:text-accent' } }}
       style={theme}
     />
   );

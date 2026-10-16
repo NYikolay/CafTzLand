@@ -31,7 +31,7 @@ export function CoffeeItem({ product }: { product: Product }) {
           <p className="text-sm font-medium text-accent">{product.tasting_notes}</p>
         ) : null}
         {product.description ? (
-          <p className="max-w-[520px] text-sm leading-relaxed text-muted">
+          <p className="max-w-130 text-sm leading-relaxed text-muted">
             {product.description}
           </p>
         ) : null}
@@ -42,7 +42,7 @@ export function CoffeeItem({ product }: { product: Product }) {
         ) : null}
       </div>
 
-      <div className="flex flex-col items-start gap-[18px]">
+      <div className="flex flex-col items-start gap-4.5">
         <div className="flex gap-9 md:gap-7">
           {[first, second].filter(Boolean).map((variant) => (
             <div key={variant.id} className="flex flex-col gap-2">

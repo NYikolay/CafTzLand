@@ -3,9 +3,9 @@
 @theme {
   --color-cream: #f4f0e7;
   --color-cream-deep: #e9e2d5;
-  --color-ink: #30251f;
+  --color-ink: #30251F;
   --color-accent: #c8472c;
-  --color-accent-deep: #a03720;
+  --color-accent-deep: #c8472c;
   --color-line: #cdc4b7;
   --color-muted: #75695f;
   --color-paper: #fffcf5;
@@ -23,4 +23,6 @@ body {
   background-color: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
 }

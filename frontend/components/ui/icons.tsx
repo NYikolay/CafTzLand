@@ -3,7 +3,7 @@ type IconProps = {
   size?: number;
 };
 
-export function ArrowUpRightIcon({ className, size = 14 }: IconProps) {
+export function ArrowUpRightIcon({ className, size = 20 }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
