@@ -40,8 +40,4 @@
 
 **Ссылка на сайт:** https://tzkvvit.site
 
-**Админ панель:** https://tzkvvit.site/b0aff1d2b4e3d6da9054
-
 **Бот:** @vitai_world_kwarta_bot (чтобы он отправлял сообщения нужо в админке добавить свой telegram_id и начать самостоятельно диалог с ботом так как tg блочит первое сообщение со стороны бота)
-
-**Пароль и логин от админки:** adwnsmtst | CntTMAYk1VIc0YyE/WEQXPmcR04AEhWx
