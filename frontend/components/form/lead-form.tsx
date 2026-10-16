@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Field } from "@/components/form/field";
 import { useLeadForm } from "@/components/form/lead-form-context";
 import { RadioCard } from "@/components/form/radio-card";
@@ -13,7 +14,7 @@ import { interpretLeadResponse, GENERIC_LEAD_ERROR } from "@/lib/api/lead";
 import { collectLeadSource } from "@/lib/lead-source";
 import { BY_PHONE_MASK, formatByPhone } from "@/lib/phone";
 import { leadFormSchema, toLeadApiPayload, type LeadFormValues } from "@/lib/schemas/lead";
-import type { InterestOption, LeadResult, Product } from "@/lib/types";
+import type { InterestOption, Product } from "@/lib/types";
 
 type LeadFormProps = {
   products: Product[];
@@ -22,13 +23,13 @@ type LeadFormProps = {
 
 export function LeadForm({ products, options }: LeadFormProps) {
   const { selectedInterest, selectedProductId } = useLeadForm();
-  const [result, setResult] = useState<LeadResult | null>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
     setError,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<LeadFormValues>({
     resolver: zodResolver(leadFormSchema),
@@ -54,7 +55,6 @@ export function LeadForm({ products, options }: LeadFormProps) {
   }, [selectedProductId, setValue]);
 
   const onSubmit = handleSubmit(async (values) => {
-    setResult(null);
     try {
       const response = await fetch("/api/lead", {
         method: "POST",
@@ -66,38 +66,36 @@ export function LeadForm({ products, options }: LeadFormProps) {
       });
       const body = await response.json().catch(() => null);
       const interpreted = interpretLeadResponse(response.status, body);
+
       if (interpreted.status === "validation") {
         const fieldErrors = Object.entries(interpreted.fieldErrors);
-        for (const [field, message] of fieldErrors) {
-          setError(field as keyof LeadFormValues, { message });
+        if (fieldErrors.length > 0) {
+          for (const [field, message] of fieldErrors) {
+            setError(field as keyof LeadFormValues, { message });
+          }
+        } else {
+          toast.error(interpreted.message ?? GENERIC_LEAD_ERROR);
         }
-        setResult(
-          fieldErrors.length === 0
-            ? { status: "error", message: GENERIC_LEAD_ERROR }
-            : interpreted,
-        );
-      } else {
-        setResult(interpreted);
+        return;
       }
+
+      if (interpreted.status === "created") {
+        toast.success("Спасибо! Заявка отправлена — менеджер перезвонит.");
+        reset();
+        return;
+      }
+
+      if (interpreted.status === "duplicate") {
+        toast.success("Заявка уже отправлена — менеджер перезвонит.");
+        reset();
+        return;
+      }
+
+      toast.error(interpreted.message);
     } catch {
-      setResult({ status: "error", message: GENERIC_LEAD_ERROR });
+      toast.error(GENERIC_LEAD_ERROR);
     }
   });
-
-  if (result?.status === "created") {
-    return (
-      <div role="status" className="rounded-md bg-cream p-6 md:p-9">
-        <p className="font-serif text-3xl">Спасибо! Заявка отправлена — менеджер перезвонит.</p>
-      </div>
-    );
-  }
-
-  const banner =
-    result?.status === "duplicate"
-      ? "Заявка уже отправлена — менеджер перезвонит"
-      : result?.status === "error"
-        ? result.message
-        : null;
 
   return (
     <form onSubmit={onSubmit} noValidate className="rounded-md bg-cream p-6 md:p-9">
@@ -187,12 +185,6 @@ export function LeadForm({ products, options }: LeadFormProps) {
           </select>
         </Field>
       </div>
-
-      {banner ? (
-        <p role="alert" className="mt-5 text-[13px] text-accent-deep">
-          {banner}
-        </p>
-      ) : null}
 
       <Button type="submit" disabled={isSubmitting} className="mt-6 w-full">
         {isSubmitting ? "Отправляем…" : "Оставить заявку"}

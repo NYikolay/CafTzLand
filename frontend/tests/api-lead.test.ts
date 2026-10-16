@@ -35,6 +35,21 @@ describe("interpretLeadResponse", () => {
       fieldErrors: {
         phone_number: "Пожалуйста, введите корректный номер телефона",
       },
+      message: "Ошибка валидации",
+    });
+  });
+
+  it("422 без details -> message товара недоступен", () => {
+    const body = {
+      error: {
+        code: "validation_error",
+        message: "Выбранный кофе больше недоступен — выберите другой или оставьте поле пустым",
+      },
+    };
+    expect(interpretLeadResponse(422, body)).toEqual({
+      status: "validation",
+      fieldErrors: {},
+      message: "Выбранный кофе больше недоступен — выберите другой или оставьте поле пустым",
     });
   });
 

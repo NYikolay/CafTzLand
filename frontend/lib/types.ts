@@ -37,7 +37,7 @@ export type LeadFieldErrors = Partial<
 export type LeadResult =
   | { status: "created"; id: number }
   | { status: "duplicate"; id: number }
-  | { status: "validation"; fieldErrors: LeadFieldErrors }
+  | { status: "validation"; fieldErrors: LeadFieldErrors; message?: string }
   | { status: "error"; message: string };
 
 export type InterestOption = {

@@ -1,11 +1,19 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { toast } from "sonner";
 import { LeadForm } from "@/components/form/lead-form";
 import { LeadFormProvider, useLeadForm } from "@/components/form/lead-form-context";
 import { SubscribeCtaButton } from "@/components/form/subscribe-cta-button";
 import { fixtureLeadOptions } from "@/lib/fixtures/lead-options";
 import { fixtureProducts } from "@/lib/fixtures/products";
+
+vi.mock("sonner", () => ({
+  toast: { success: vi.fn(), error: vi.fn() },
+}));
+
+const GENERIC_LEAD_ERROR_TEXT =
+  "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.";
 
 function renderForm() {
   return render(
@@ -24,8 +32,18 @@ function PresetCoffeeButton({ productId }: { productId: number }) {
   );
 }
 
+async function fillAndSubmit(
+  user: ReturnType<typeof userEvent.setup>,
+  phone = "291234567",
+) {
+  await user.type(screen.getByLabelText("Ваше имя"), "Иван");
+  await user.type(screen.getByLabelText("Телефон"), phone);
+  await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+}
+
 describe("LeadForm", () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.unstubAllGlobals();
     window.history.replaceState({}, "", "/");
   });
@@ -45,18 +63,17 @@ describe("LeadForm", () => {
     expect(grid?.className).toContain("lg:grid-cols-3");
   });
 
-  it("показывает текст ошибки телефона из макета", async () => {
+  it("показывает текст ошибки телефона из макета и не показывает тост", async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "123");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    await fillAndSubmit(user, "123");
     expect(
       await screen.findByText("Пожалуйста, введите корректный номер телефона"),
     ).toBeInTheDocument();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
-  it("показывает подтверждение при 201", async () => {
+  it("показывает тост успеха и очищает форму при 201", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
@@ -65,15 +82,17 @@ describe("LeadForm", () => {
       ),
     );
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
-    expect(
-      await screen.findByText("Спасибо! Заявка отправлена — менеджер перезвонит."),
-    ).toBeInTheDocument();
+    await fillAndSubmit(user);
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(
+        "Спасибо! Заявка отправлена — менеджер перезвонит.",
+      ),
+    );
+    expect(screen.getByLabelText("Ваше имя")).toHaveValue("");
+    expect(screen.getByLabelText("Телефон")).toHaveValue("");
   });
 
-  it("показывает сообщение о дубле", async () => {
+  it("показывает успешный тост при дубле и очищает форму", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
@@ -82,15 +101,17 @@ describe("LeadForm", () => {
       ),
     );
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
-    expect(
-      await screen.findByText("Заявка уже отправлена — менеджер перезвонит"),
-    ).toBeInTheDocument();
+    await fillAndSubmit(user);
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(
+        "Заявка уже отправлена — менеджер перезвонит.",
+      ),
+    );
+    expect(screen.getByLabelText("Ваше имя")).toHaveValue("");
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
-  it("показывает msg от backend из 422", async () => {
+  it("показывает msg от backend из 422 под полем без тоста", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
@@ -110,10 +131,35 @@ describe("LeadForm", () => {
       ),
     );
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "375291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    await fillAndSubmit(user, "375291234567");
     expect(await screen.findByText("Номер не обслуживается")).toBeInTheDocument();
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it("показывает сообщение backend при 422 без деталей", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json(
+          {
+            error: {
+              code: "validation_error",
+              message:
+                "Выбранный кофе больше недоступен — выберите другой или оставьте поле пустым",
+            },
+          },
+          { status: 422 },
+        ),
+      ),
+    );
+    renderForm();
+    await fillAndSubmit(user);
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(
+        "Выбранный кофе больше недоступен — выберите другой или оставьте поле пустым",
+      ),
+    );
   });
 
   it("пресет товара из контекста выставляет select", async () => {
@@ -166,9 +212,7 @@ describe("LeadForm", () => {
       ),
     );
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    await fillAndSubmit(user);
     expect(await screen.findByText("Такого кофе нет")).toBeInTheDocument();
   });
 
@@ -192,13 +236,11 @@ describe("LeadForm", () => {
       ),
     );
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    await fillAndSubmit(user);
     expect(await screen.findByText("Подписка недоступна")).toBeInTheDocument();
   });
 
-  it("показывает общую ошибку при 500", async () => {
+  it("показывает общий тост при 500", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
@@ -210,41 +252,9 @@ describe("LeadForm", () => {
       ),
     );
     renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
-    expect(
-      await screen.findByText(
-        "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.",
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it("показывает общее сообщение при 422 без деталей", async () => {
-    const user = userEvent.setup();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue(
-        Response.json(
-          {
-            error: {
-              code: "validation_error",
-              message: "Ошибка валидации",
-              details: [],
-            },
-          },
-          { status: 422 },
-        ),
-      ),
+    await fillAndSubmit(user);
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(GENERIC_LEAD_ERROR_TEXT),
     );
-    renderForm();
-    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
-    await user.type(screen.getByLabelText("Телефон"), "291234567");
-    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
-    expect(
-      await screen.findByText(
-        "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.",
-      ),
-    ).toBeInTheDocument();
   });
 });

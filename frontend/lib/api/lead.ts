@@ -41,7 +41,7 @@ export function interpretLeadResponse(status: number, body: unknown): LeadResult
         fieldErrors[field] = detail.msg;
       }
     }
-    return { status: "validation", fieldErrors };
+    return { status: "validation", fieldErrors, message: data?.error?.message };
   }
 
   return { status: "error", message: GENERIC_LEAD_ERROR };
