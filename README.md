@@ -44,14 +44,15 @@ docker compose --env-file .env.prod -f compose.prod.yaml ps
 docker compose --env-file .env.prod -f compose.prod.yaml logs -f backend
 
 # 3. Первичный сертификат Let's Encrypt (nginx уже слушает :80)
-docker compose --env-file .env.prod -f compose.prod.yaml run --rm certbot \
+docker compose --env-file .env.prod -f compose.prod.yaml run --rm --entrypoint certbot certbot \
   certonly --webroot -w /var/www/certbot \
   -d tzkvvit.site -d www.tzkvvit.site \
   --email <email> --agree-tos --no-eff-email
 
 # 4. SSL: добавить 443 server-блок в nginx/default.conf
 #    (ssl_certificate /etc/letsencrypt/live/tzkvvit.site/fullchain.pem;
-#     proxy_pass http://frontend:3000; для /api/ — http://backend:8000)
+#     proxy_pass http://frontend:3000 — включая /api/lead: BFF сам проксирует
+#     в backend внутри сети; напрямую API — только /api/v1/ → http://backend:8000)
 docker compose --env-file .env.prod -f compose.prod.yaml exec nginx nginx -s reload
 
 # Остановка (тома с данными сохраняются)
