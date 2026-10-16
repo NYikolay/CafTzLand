@@ -30,6 +30,38 @@
 Ошибок как таковых агент не допускал, проект всегда запускался с первого раза. Благодаря SDD и TDD агент чётко понимает что ему делать, сам себя ревьюит и задаёт вопросы когда чего-то не понимает. Количество ошибок минимально, главное чётко описать задачу  
 Чтобы реализовать такой простой backend было достаточно дать агенту посмотреть дизайн и пару наводящих фактов.
 
+## Деплой (production)
+
+Требуется: Docker + Compose на сервере, DNS A-запись `tzkvvit.site` → IP сервера.
+
+```bash
+# 1. Окружение
+cp .env.prod.example .env.prod   # заполнить секреты: openssl rand -hex 32
+
+# 2. Сборка и запуск (проект kvarta-prod)
+docker compose --env-file .env.prod -f compose.prod.yaml up -d --build --wait
+docker compose --env-file .env.prod -f compose.prod.yaml ps
+docker compose --env-file .env.prod -f compose.prod.yaml logs -f backend
+
+# 3. Первичный сертификат Let's Encrypt (nginx уже слушает :80)
+docker compose --env-file .env.prod -f compose.prod.yaml run --rm certbot \
+  certonly --webroot -w /var/www/certbot \
+  -d tzkvvit.site -d www.tzkvvit.site \
+  --email <email> --agree-tos --no-eff-email
+
+# 4. SSL: добавить 443 server-блок в nginx/default.conf
+#    (ssl_certificate /etc/letsencrypt/live/tzkvvit.site/fullchain.pem;
+#     proxy_pass http://frontend:3000; для /api/ — http://backend:8000)
+docker compose --env-file .env.prod -f compose.prod.yaml exec nginx nginx -s reload
+
+# Остановка (тома с данными сохраняются)
+docker compose --env-file .env.prod -f compose.prod.yaml down
+```
+
+- `NEXT_PUBLIC_SITE_URL` инлайнится в HTML на этапе сборки: смена домена требует пересборки frontend.
+- Продление сертификата автоматическое — сервис `certbot` каждые 12 часов.
+- Dev-стек: `docker compose up -d --build` (порт frontend — 3000, backend — 8000).
+
 **Ссылка на сайт:** ...  
 **Админ панель:** ...  
 **Бот:** ...
