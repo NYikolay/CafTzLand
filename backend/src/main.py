@@ -65,7 +65,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         engine=engine,
         authentication_backend=AdminAuthBackend(app_settings),
         title=app_settings.app_name,
-        base_url=app_settings.admin_password
+        base_url=app_settings.admin_url
     )
     admin.add_view(OrderAdmin)
     admin.add_view(ProductAdmin)
