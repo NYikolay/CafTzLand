@@ -36,4 +36,13 @@ describe("fetchProducts", () => {
     );
     await expect(fetchProducts()).resolves.toEqual([fixtureProducts[0]]);
   });
+
+  it("возвращает фикстуры при невалидном JSON", async () => {
+    vi.stubEnv("API_INTERNAL_BASE_URL", "http://backend:8000");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response("{", { status: 200 })),
+    );
+    await expect(fetchProducts()).resolves.toEqual(fixtureProducts);
+  });
 });

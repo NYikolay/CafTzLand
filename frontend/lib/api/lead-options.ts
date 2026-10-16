@@ -12,7 +12,7 @@ const interestOptionSchema = z.object({
 export async function fetchLeadOptions(): Promise<InterestOption[]> {
   const response = await apiFetch("/api/v1/lead/options");
   if (response?.ok) {
-    const parsed = z.array(interestOptionSchema).safeParse(await response.json());
+    const parsed = z.array(interestOptionSchema).safeParse(await response.json().catch(() => null));
     if (parsed.success) return parsed.data;
     console.warn("[api] lead options: невалидный ответ backend, использую фикстуры");
   }

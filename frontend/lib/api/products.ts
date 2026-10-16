@@ -26,7 +26,7 @@ const productSchema = z.object({
 export async function fetchProducts(): Promise<Product[]> {
   const response = await apiFetch("/api/v1/products");
   if (response?.ok) {
-    const parsed = z.array(productSchema).safeParse(await response.json());
+    const parsed = z.array(productSchema).safeParse(await response.json().catch(() => null));
     if (parsed.success) return parsed.data;
     console.warn("[api] products: невалидный ответ backend, использую фикстуры");
   } else if (response) {
