@@ -6,3 +6,5 @@ nginx/certs/*.crt
 .idea
 docs/
 graphify-out/
+.worktrees/
+.superpowers/
