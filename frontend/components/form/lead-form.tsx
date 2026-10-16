@@ -131,7 +131,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
             placeholder="Как к вам обращаться"
             aria-invalid={errors.name ? true : undefined}
             aria-describedby={errors.name ? "lead-name-error" : undefined}
-            className="h-12 w-full rounded-[3px] border border-line bg-paper px-4 text-sm outline-none focus:border-accent"
+            className="h-12 w-full rounded-[3px] border border-line bg-paper px-4 text-[16px] outline-none focus:border-accent"
           />
         </Field>
 
@@ -150,7 +150,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
             placeholder={BY_PHONE_MASK}
             aria-invalid={errors.phone_number ? true : undefined}
             aria-describedby={errors.phone_number ? "lead-phone-error" : undefined}
-            className={`h-12 w-full rounded-[3px] border bg-paper px-4 text-sm outline-none focus:border-accent ${
+            className={`h-12 w-full rounded-[3px] border bg-paper px-4 text-[16px] outline-none focus:border-accent ${
               errors.phone_number ? "border-accent" : "border-line"
             }`}
           />
@@ -162,7 +162,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
             rows={3}
             {...register("comment")}
             placeholder="Оставьте ваш вопрос тут"
-            className="w-full rounded-[3px] border border-line bg-paper px-4 py-3 text-sm outline-none focus:border-accent"
+            className="w-full rounded-[3px] border border-line bg-paper px-4 py-3 text-[16px] outline-none focus:border-accent"
           />
         </Field>
 
@@ -175,7 +175,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
             <select
                 id="lead-coffee"
                 {...register("product_id")}
-                className="appearance-none h-12 w-full rounded-[3px] cursor-pointer border border-line bg-paper pl-4 pr-10 text-sm outline-none focus:border-accent"
+                className="appearance-none h-12 w-full rounded-[3px] cursor-pointer border border-line bg-paper pl-4 pr-10 text-[16px] outline-none focus:border-accent"
             >
               <option value="">Помогите выбрать</option>
               {products.map((product) => (
@@ -197,7 +197,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
         </Field>
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="mt-6 w-full">
+      <Button type="submit" disabled={isSubmitting} className="mt-6 w-full ">
         {isSubmitting ? "Отправляем…" : "Оставить заявку"}
         <ArrowUpRightIcon />
       </Button>
