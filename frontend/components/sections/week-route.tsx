@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { ArrowRightIcon } from "@/components/ui/icons";
 
 const SEGMENTS = ["ЧТ — ОБЖАРКА", "ПТ — РАЗВОЗИМ", "У ВАС НА 1–3 ДЕНЬ ПОСЛЕ ОБЖАРКИ"] as const;
 
@@ -12,11 +13,7 @@ export function WeekRoute() {
               key={segment}
               className={`flex items-center gap-4 ${index === 2 ? "hidden md:flex" : ""}`}
             >
-              {index > 0 ? (
-                <span aria-hidden className="text-base">
-                  →
-                </span>
-              ) : null}
+              {index > 0 ? <ArrowRightIcon /> : null}
               <span>{segment}</span>
             </div>
           ))}

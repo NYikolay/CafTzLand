@@ -7,6 +7,7 @@ import { Field } from "@/components/form/field";
 import { useLeadForm } from "@/components/form/lead-form-context";
 import { RadioCard } from "@/components/form/radio-card";
 import { Button } from "@/components/ui/button";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 import { RoastMark } from "@/components/ui/roast-mark";
 import { interpretLeadResponse, GENERIC_LEAD_ERROR } from "@/lib/api/lead";
 import { collectLeadSource } from "@/lib/lead-source";
@@ -195,7 +196,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
 
       <Button type="submit" disabled={isSubmitting} className="mt-6 w-full">
         {isSubmitting ? "Отправляем…" : "Оставить заявку"}
-        <span aria-hidden>↗</span>
+        <ArrowUpRightIcon />
       </Button>
 
       <p className="mt-4 text-[13px] leading-relaxed text-muted">

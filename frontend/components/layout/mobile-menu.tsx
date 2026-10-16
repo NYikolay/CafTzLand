@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { NAV_LINKS } from "@/components/layout/nav-links";
 import { ButtonLink } from "@/components/ui/button";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,7 +66,7 @@ export function MobileMenu() {
           </nav>
           <ButtonLink href="#zayavka" onClick={() => setIsOpen(false)} className="w-fit">
             Оставить заявку
-            <span aria-hidden>↗</span>
+            <ArrowUpRightIcon />
           </ButtonLink>
         </div>
       ) : null}

@@ -3,6 +3,7 @@ import { MobileMenu } from "@/components/layout/mobile-menu";
 import { NAV_LINKS } from "@/components/layout/nav-links";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 import { RoastMark } from "@/components/ui/roast-mark";
 
 export function SiteHeader() {
@@ -34,7 +35,7 @@ export function SiteHeader() {
             ))}
             <ButtonLink href="#zayavka">
               Оставить заявку
-              <span aria-hidden>↗</span>
+              <ArrowUpRightIcon />
             </ButtonLink>
           </nav>
 

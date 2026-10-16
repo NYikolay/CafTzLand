@@ -3,6 +3,7 @@ import { SubscribeCtaButton } from "@/components/form/subscribe-cta-button";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 
 export function HeroSection() {
   return (
@@ -28,7 +29,7 @@ export function HeroSection() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <ButtonLink href="#coffee">
                 Выбрать кофе
-                <span aria-hidden>↗</span>
+                <ArrowUpRightIcon />
               </ButtonLink>
               <SubscribeCtaButton variant="outline" label="Или оформить подписку" />
             </div>

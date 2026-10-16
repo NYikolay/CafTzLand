@@ -1,6 +1,7 @@
 "use client";
 
 import { useLeadForm } from "@/components/form/lead-form-context";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 import type { ReactNode } from "react";
 
 export function CoffeeOrderButton({
@@ -18,7 +19,7 @@ export function CoffeeOrderButton({
       className="inline-flex items-center gap-1 text-sm font-medium text-accent-deep underline-offset-4 hover:underline"
     >
       {children}
-      <span aria-hidden>↗</span>
+      <ArrowUpRightIcon />
     </button>
   );
 }

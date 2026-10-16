@@ -2,6 +2,7 @@
 
 import { useLeadForm } from "@/components/form/lead-form-context";
 import { Button } from "@/components/ui/button";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 
 export function SubscribeCtaButton({
   variant = "accent",
@@ -14,7 +15,7 @@ export function SubscribeCtaButton({
   return (
     <Button variant={variant} onClick={() => selectInterest("subscription")}>
       {label}
-      <span aria-hidden>↗</span>
+      <ArrowUpRightIcon />
     </Button>
   );
 }
