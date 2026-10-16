@@ -32,7 +32,7 @@
 
 ## Деплой (production)
 
-Требуется: Docker + Compose на сервере, DNS A-запись `tzkvvit.site` → IP сервера.
+Требуется: Docker + Compose на сервере, DNS A-записи `tzkvvit.site` и `www.tzkvvit.site` → IP сервера.
 
 ```bash
 # 1. Окружение
@@ -43,7 +43,7 @@ docker compose --env-file .env.prod -f compose.prod.yaml up -d --build --wait
 docker compose --env-file .env.prod -f compose.prod.yaml ps
 docker compose --env-file .env.prod -f compose.prod.yaml logs -f backend
 
-# 3. Первичный сертификат Let's Encrypt (nginx уже слушает :80)
+# 3. Первый сертификат Let's Encrypt (заменить <email>; nginx уже слушает :80)
 docker compose --env-file .env.prod -f compose.prod.yaml run --rm --entrypoint certbot certbot \
   certonly --webroot -w /var/www/certbot \
   -d tzkvvit.site -d www.tzkvvit.site \
@@ -60,8 +60,8 @@ docker compose --env-file .env.prod -f compose.prod.yaml down
 ```
 
 - `NEXT_PUBLIC_SITE_URL` инлайнится в HTML на этапе сборки: смена домена требует пересборки frontend.
-- Продление сертификата автоматическое — сервис `certbot` каждые 12 часов.
-- Dev-стек: `docker compose up -d --build` (порт frontend — 3000, backend — 8000).
+- Сервис `certbot` обновляет сертификаты каждые 12 часов, но nginx нужно перезагрузить, чтобы он подхватил новый сертификат: `docker compose --env-file .env.prod -f compose.prod.yaml exec nginx nginx -s reload` (например, из cron раз в неделю).
+- Dev-стек: `cp backend/.env.example backend/.env` (заполнить креды) и `docker compose up -d --build` (порт frontend — 3000, backend — 8000).
 
 **Ссылка на сайт:** ...  
 **Админ панель:** ...  
