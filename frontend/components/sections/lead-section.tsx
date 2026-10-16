@@ -9,7 +9,7 @@ export async function LeadSection() {
   const [products, options] = await Promise.all([getProducts(), getLeadOptions()]);
 
   return (
-    <section id="zayavka" aria-labelledby="zayavka-heading" className="bg-ink pt-14 lg:pt-[72px]">
+    <section id="zayavka" aria-labelledby="zayavka-heading" className="flex-1 bg-ink pt-14 lg:pt-[72px]">
       <Container>
         <div className="grid gap-12 pb-16 lg:grid-cols-[1fr_minmax(420px,583px)] lg:gap-[100px]">
           <div className="flex flex-col gap-6">

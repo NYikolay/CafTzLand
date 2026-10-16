@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <LeadFormProvider>
       <SiteHeader />
-      <main className="flex-1">
+      <main className="flex flex-1 flex-col">
         <HeroSection />
         <WeekRoute />
         <WorkshopSection />
