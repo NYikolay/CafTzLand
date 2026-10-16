@@ -3,7 +3,7 @@ import { buildJsonLd } from "@/lib/seo";
 
 export async function StructuredData() {
   const products = await getProducts();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kvarta.by";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tzkvvit.site";
   const jsonLd = buildJsonLd(products, siteUrl);
 
   return (

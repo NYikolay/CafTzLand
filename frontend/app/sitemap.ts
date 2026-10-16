@@ -5,7 +5,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";
   cacheLife("days");
 
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kvarta.by";
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tzkvvit.site";
   return [
     {
       url: base,
