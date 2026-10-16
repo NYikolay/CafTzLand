@@ -6,7 +6,7 @@ type RadioCardProps = InputHTMLAttributes<HTMLInputElement> & {
 
 export function RadioCard({ label, ...inputProps }: RadioCardProps) {
   return (
-    <label className="flex flex-1 cursor-pointer items-center gap-2 rounded-[3px] border border-line px-4 py-3 text-sm transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/5">
+    <label className="flex cursor-pointer items-center gap-2 rounded-[3px] border border-line px-4 py-3 text-sm transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/5">
       <input type="radio" className="peer sr-only" {...inputProps} />
       <span
         aria-hidden

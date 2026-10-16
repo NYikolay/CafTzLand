@@ -35,6 +35,16 @@ describe("LeadForm", () => {
     expect(screen.getByRole("radio", { name: "Подписка" })).toBeChecked();
   });
 
+  it("варианты заказа — сетка с равными ширинами", () => {
+    renderForm();
+    const card = screen.getByRole("radio", { name: "Вопрос" }).closest("label");
+    expect(card).not.toBeNull();
+    expect(card?.className).not.toContain("flex-1");
+    const grid = card?.parentElement;
+    expect(grid?.className).toContain("grid-cols-2");
+    expect(grid?.className).toContain("lg:grid-cols-3");
+  });
+
   it("показывает текст ошибки телефона из макета", async () => {
     const user = userEvent.setup();
     renderForm();

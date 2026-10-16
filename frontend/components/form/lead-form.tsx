@@ -108,7 +108,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
 
       <fieldset className="mb-6">
         <legend className="mb-3 text-sm">Как хотите заказывать?</legend>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-3">
           {options.map((option) => (
             <RadioCard
               key={option.value}
