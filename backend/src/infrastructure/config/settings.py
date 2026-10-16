@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     secret_key: str = Field(min_length=32)
     admin_username: str = "admin"
     admin_password: str = Field(min_length=8)
+    admin_url: str = "/admin"
 
     allowed_hosts: list[str] = Field(default_factory=lambda: ["localhost", "127.0.0.1"])
     cors_origins: list[str] = Field(default_factory=list)
