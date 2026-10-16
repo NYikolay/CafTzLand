@@ -15,7 +15,7 @@ export function CoffeeOrderButton({
     <button
       type="button"
       onClick={() => selectCoffee(productId)}
-      className="inline-flex items-center gap-1 text-sm font-medium text-accent-deep transition-colors hover:text-[#a03720]"
+      className="inline-flex items-center gap-1 text-sm font-medium text-accent-deep transition-colors hover:text-accent"
     >
       {children}
       <span aria-hidden>↗</span>
