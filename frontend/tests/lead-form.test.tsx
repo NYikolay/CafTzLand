@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LeadForm } from "@/components/form/lead-form";
 import { LeadFormProvider, useLeadForm } from "@/components/form/lead-form-context";
+import { SubscribeCtaButton } from "@/components/form/subscribe-cta-button";
 import { fixtureLeadOptions } from "@/lib/fixtures/lead-options";
 import { fixtureProducts } from "@/lib/fixtures/products";
 
@@ -116,6 +117,22 @@ describe("LeadForm", () => {
     await user.click(screen.getByRole("button", { name: "пресет кофе" }));
     await waitFor(() => {
       expect(screen.getByLabelText("Какой кофе? Необязательно")).toHaveValue("4");
+    });
+  });
+
+  it("пресет интереса из контекста возвращает «Подписка»", async () => {
+    const user = userEvent.setup();
+    render(
+      <LeadFormProvider>
+        <SubscribeCtaButton />
+        <LeadForm products={fixtureProducts} options={fixtureLeadOptions} />
+      </LeadFormProvider>,
+    );
+    await user.click(screen.getByRole("radio", { name: "Вопрос" }));
+    expect(screen.getByRole("radio", { name: "Вопрос" })).toBeChecked();
+    await user.click(screen.getByRole("button", { name: /Хочу кофе по подписке/ }));
+    await waitFor(() => {
+      expect(screen.getByRole("radio", { name: "Подписка" })).toBeChecked();
     });
   });
 

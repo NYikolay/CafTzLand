@@ -16,7 +16,7 @@ export function Field({ id, label, error, children, className }: FieldProps) {
       </label>
       {children}
       {error ? (
-        <p id={`${id}-error`} role="alert" className="mt-2 text-[13px] leading-snug text-accent">
+        <p id={`${id}-error`} role="alert" className="mt-2 text-[13px] leading-snug text-accent-deep">
           {error}
         </p>
       ) : null}

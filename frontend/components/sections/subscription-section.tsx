@@ -16,11 +16,11 @@ export function SubscriptionSection() {
             >
               Пусть кофе <em className="italic">не кончается.</em>
             </h2>
-            <p className="max-w-[520px] text-base leading-relaxed text-paper/90">
+            <p className="max-w-[520px] text-base leading-relaxed text-paper">
               Один раз договариваемся о кофе и количестве. Дальше в неделе появляется приятная
               постоянная — свежая обжарка для дома или офиса.
             </p>
-            <p className="max-w-[520px] text-base leading-relaxed text-paper/90">
+            <p className="max-w-[520px] text-base leading-relaxed text-paper">
               Оставьте заявку. Менеджер перезвонит, поможет выбрать набор и согласует
               регулярность доставки.
             </p>

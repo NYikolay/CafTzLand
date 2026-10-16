@@ -118,7 +118,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
           ))}
         </div>
         {errors.interest ? (
-          <p role="alert" className="mt-2 text-[13px] leading-snug text-accent">
+          <p role="alert" className="mt-2 text-[13px] leading-snug text-accent-deep">
             {errors.interest.message}
           </p>
         ) : null}
@@ -158,11 +158,12 @@ export function LeadForm({ products, options }: LeadFormProps) {
         </Field>
 
         <Field id="lead-comment" label="Комментарий" error={errors.comment?.message}>
-          <input
+          <textarea
             id="lead-comment"
+            rows={3}
             {...register("comment")}
             placeholder="Оставьте ваш вопрос тут"
-            className="h-12 w-full rounded-[3px] border border-line bg-paper px-4 text-sm outline-none focus:border-accent"
+            className="w-full rounded-[3px] border border-line bg-paper px-4 py-3 text-sm outline-none focus:border-accent"
           />
         </Field>
 
@@ -187,7 +188,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
       </div>
 
       {banner ? (
-        <p role="alert" className="mt-5 text-[13px] text-accent">
+        <p role="alert" className="mt-5 text-[13px] text-accent-deep">
           {banner}
         </p>
       ) : null}

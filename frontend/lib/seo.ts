@@ -31,23 +31,25 @@ export function buildJsonLd(products: Product[], siteUrl: string) {
       },
       {
         "@type": "ItemList",
-        itemListElement: products.map((product, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          item: {
-            "@type": "Product",
-            name: product.name,
-            description: product.description ?? undefined,
-            offers: product.variants[0]
-              ? {
-                  "@type": "Offer",
-                  price: product.variants[0].price,
-                  priceCurrency: "BYN",
-                  availability: "https://schema.org/InStock",
-                }
-              : undefined,
-          },
-        })),
+        itemListElement: products
+          .filter((product) => product.kind !== "set")
+          .map((product, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+              "@type": "Product",
+              name: product.name,
+              description: product.description ?? undefined,
+              offers: product.variants[0]
+                ? {
+                    "@type": "Offer",
+                    price: product.variants[0].price,
+                    priceCurrency: "BYN",
+                    availability: "https://schema.org/InStock",
+                  }
+                : undefined,
+            },
+          })),
       },
     ],
   };

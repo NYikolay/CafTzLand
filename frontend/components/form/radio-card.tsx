@@ -10,7 +10,7 @@ export function RadioCard({ label, ...inputProps }: RadioCardProps) {
       <input type="radio" className="peer sr-only" {...inputProps} />
       <span
         aria-hidden
-        className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-muted after:h-2 after:w-2 after:rounded-full after:bg-accent after:content-[''] after:hidden peer-checked:border-accent peer-checked:after:block"
+        className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-muted after:h-2 after:w-2 after:rounded-full after:bg-accent after:content-[''] after:hidden peer-checked:border-accent peer-checked:after:block peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2"
       />
       <span>{label}</span>
     </label>

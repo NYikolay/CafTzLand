@@ -46,6 +46,10 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
+  if (upstream.status === 204 || upstream.status === 205 || upstream.status === 304) {
+    return new Response(null, { status: upstream.status });
+  }
+
   return new Response(await upstream.text(), {
     status: upstream.status,
     headers: { "Content-Type": "application/json" },

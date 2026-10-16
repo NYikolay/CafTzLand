@@ -17,7 +17,7 @@ describe("buildJsonLd", () => {
       itemListElement: Array<{ item: { name: string; offers: { price: string } } }>;
     };
     expect(list["@type"]).toBe("ItemList");
-    expect(list.itemListElement).toHaveLength(fixtureProducts.length);
+    expect(list.itemListElement).toHaveLength(4);
     expect(list.itemListElement[0].item.name).toBe("Бразилия Серрадо");
     expect(list.itemListElement[0].item.offers.price).toBe("26.00");
   });

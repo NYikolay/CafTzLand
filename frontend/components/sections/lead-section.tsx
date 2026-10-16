@@ -13,7 +13,7 @@ export async function LeadSection() {
       <Container>
         <div className="grid gap-12 pb-16 lg:grid-cols-[1fr_minmax(420px,583px)] lg:gap-[100px]">
           <div className="flex flex-col gap-6">
-            <Eyebrow className="text-accent">05 / Оставьте заявку</Eyebrow>
+            <Eyebrow className="text-cream">05 / Оставьте заявку</Eyebrow>
             <h2
               id="zayavka-heading"
               className="font-serif text-[clamp(36px,5vw,62px)] leading-[1.08] tracking-[-0.032em] text-cream"
