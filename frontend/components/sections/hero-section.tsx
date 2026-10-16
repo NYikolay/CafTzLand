@@ -40,7 +40,7 @@ export function HeroSection() {
               alt="Обжарщик пересыпает свежеобжаренные зёрна в бумажный пакет в мастерской Кварты"
               width={1572}
               height={1776}
-              priority
+              preload
               sizes="(min-width: 1024px) 524px, 100vw"
               className="h-auto w-full object-cover"
             />
