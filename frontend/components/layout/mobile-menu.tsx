@@ -15,6 +15,16 @@ export function MobileMenu() {
   }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) return;
+    const desktopQuery = window.matchMedia("(min-width: 1024px)");
+    const onDesktopChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsOpen(false);
+    };
+    desktopQuery.addEventListener("change", onDesktopChange);
+    return () => desktopQuery.removeEventListener("change", onDesktopChange);
+  }, [isOpen]);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsOpen(false);
     };
