@@ -14,7 +14,7 @@ export function CoffeeItem({ product }: { product: Product }) {
           <span className="mt-2 font-mono text-[25px] leading-none font-medium text-accent">
             {product.code}
           </span>
-          <span aria-hidden className="mt-2 h-[3px] w-full bg-accent" />
+          <span aria-hidden className="mt-2 h-[3px] w-12 bg-accent" />
         </div>
         {product.brew_method ? (
           <p className="font-mono text-[10px] uppercase tracking-[1px] text-muted md:hidden">
