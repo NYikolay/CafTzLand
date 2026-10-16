@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
+import { cacheLife } from "next/cache";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  "use cache";
+  cacheLife("days");
+
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kvarta.by";
   return [
     {
