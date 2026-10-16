@@ -11,17 +11,16 @@ const plexSerif = IBM_Plex_Serif({
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500"],
-  display: "swap",
-});
+// const plexMono = IBM_Plex_Mono({
+//   variable: "--font-plex-mono",
+//   subsets: ["latin", "cyrillic"],
+//   weight: ["400", "500"],
+//   display: "swap",
+// });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "800"],
   display: "swap",
 });
 
@@ -59,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ru"
       data-scroll-behavior="smooth"
-      className={`${plexSerif.variable} ${plexMono.variable} ${inter.variable} h-full`}
+      className={`${plexSerif.variable} ${inter.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
         {children}

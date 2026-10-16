@@ -56,7 +56,7 @@ export function LeadForm({ products, options }: LeadFormProps) {
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      const response = await fetch("/api/lead", {
+      const response = await fetch("/api/v1/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

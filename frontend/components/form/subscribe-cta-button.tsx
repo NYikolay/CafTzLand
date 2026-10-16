@@ -14,7 +14,7 @@ export function SubscribeCtaButton({
   const { selectInterest } = useLeadForm();
 
   return (
-    <Button variant={variant} className={"text-black max-w-65.75"} onClick={() => selectInterest("subscription")}>
+    <Button variant={variant} className={"text-black md:max-w-65.75"} onClick={() => selectInterest("subscription")}>
       {label}
       <ArrowUpRightIcon className={"text-accent"} />
     </Button>
