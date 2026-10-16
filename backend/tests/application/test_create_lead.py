@@ -8,9 +8,8 @@ from application.leads import (
     CreateLead,
     CreateLeadResult,
 )
+from domain import Interest, Lead, Product, ProductKind
 from domain.exceptions import ValidationError
-from domain import Interest, Lead
-from domain import Product, ProductKind
 
 WINDOW = timedelta(minutes=10)
 

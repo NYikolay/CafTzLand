@@ -1,7 +1,6 @@
 from infrastructure.config.settings import Settings
+from infrastructure.db import AsyncDatabaseProbe, create_db_engine, create_sessionmaker
 from infrastructure.db.base import Base
-from infrastructure.db import AsyncDatabaseProbe
-from infrastructure.db import create_db_engine, create_sessionmaker
 
 
 class ExplodingConnect:

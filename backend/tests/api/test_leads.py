@@ -6,8 +6,8 @@ from httpx import AsyncClient
 
 from application.leads import PRODUCT_UNAVAILABLE_MESSAGE, CreateLeadResult
 from application.telegram.notify_new_lead import NotifyLeadResult
-from domain.exceptions import ValidationError
 from domain import Interest, Lead, LeadSource
+from domain.exceptions import ValidationError
 from presentation import get_create_lead, get_notify_new_lead
 
 VALID_PAYLOAD: dict[str, Any] = {

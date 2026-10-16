@@ -7,6 +7,7 @@ FROM python:3.14-slim-bookworm AS builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app/src \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_NO_INTERACTION=1
 
@@ -49,7 +50,7 @@ WORKDIR /app
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:create_app", \
+CMD ["uvicorn", "main:create_app", \
      "--factory", \
      "--host", "0.0.0.0", \
      "--port", "8000", \
@@ -64,6 +65,7 @@ FROM python:3.14-slim-bookworm AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app/src \
     PYTHONFAULTHANDLER=1 \
     PATH="/app/.venv/bin:$PATH" \
     APP_ENV=production
@@ -88,7 +90,7 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live', timeout=3)" || exit 1
 
-CMD ["gunicorn", "app.main:create_app()", \
+CMD ["gunicorn", "main:create_app()", \
      "--worker-class", "uvicorn.workers.UvicornWorker", \
      "--workers", "4", \
      "--bind", "0.0.0.0:8000", \
