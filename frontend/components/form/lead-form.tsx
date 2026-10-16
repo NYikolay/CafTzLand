@@ -66,11 +66,18 @@ export function LeadForm({ products, options }: LeadFormProps) {
       const body = await response.json().catch(() => null);
       const interpreted = interpretLeadResponse(response.status, body);
       if (interpreted.status === "validation") {
-        for (const [field, message] of Object.entries(interpreted.fieldErrors)) {
+        const fieldErrors = Object.entries(interpreted.fieldErrors);
+        for (const [field, message] of fieldErrors) {
           setError(field as keyof LeadFormValues, { message });
         }
+        setResult(
+          fieldErrors.length === 0
+            ? { status: "error", message: GENERIC_LEAD_ERROR }
+            : interpreted,
+        );
+      } else {
+        setResult(interpreted);
       }
-      setResult(interpreted);
     } catch {
       setResult({ status: "error", message: GENERIC_LEAD_ERROR });
     }
@@ -110,6 +117,11 @@ export function LeadForm({ products, options }: LeadFormProps) {
             />
           ))}
         </div>
+        {errors.interest ? (
+          <p role="alert" className="mt-2 text-[13px] leading-snug text-accent">
+            {errors.interest.message}
+          </p>
+        ) : null}
       </fieldset>
 
       <div className="grid gap-5">
@@ -154,7 +166,11 @@ export function LeadForm({ products, options }: LeadFormProps) {
           />
         </Field>
 
-        <Field id="lead-coffee" label="Какой кофе? Необязательно">
+        <Field
+          id="lead-coffee"
+          label="Какой кофе? Необязательно"
+          error={errors.product_id?.message}
+        >
           <select
             id="lead-coffee"
             {...register("product_id")}

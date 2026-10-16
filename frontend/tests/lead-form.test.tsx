@@ -118,4 +118,106 @@ describe("LeadForm", () => {
       expect(screen.getByLabelText("Какой кофе? Необязательно")).toHaveValue("4");
     });
   });
+
+  it("показывает msg от backend для product_id из 422", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json(
+          {
+            error: {
+              code: "validation_error",
+              message: "Ошибка валидации",
+              details: [
+                { loc: ["body", "product_id"], msg: "Такого кофе нет", type: "value_error" },
+              ],
+            },
+          },
+          { status: 422 },
+        ),
+      ),
+    );
+    renderForm();
+    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
+    await user.type(screen.getByLabelText("Телефон"), "291234567");
+    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    expect(await screen.findByText("Такого кофе нет")).toBeInTheDocument();
+  });
+
+  it("показывает msg от backend для interest из 422", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json(
+          {
+            error: {
+              code: "validation_error",
+              message: "Ошибка валидации",
+              details: [
+                { loc: ["body", "interest"], msg: "Подписка недоступна", type: "value_error" },
+              ],
+            },
+          },
+          { status: 422 },
+        ),
+      ),
+    );
+    renderForm();
+    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
+    await user.type(screen.getByLabelText("Телефон"), "291234567");
+    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    expect(await screen.findByText("Подписка недоступна")).toBeInTheDocument();
+  });
+
+  it("показывает общую ошибку при 500", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json(
+          { error: { code: "internal_error", message: "Internal server error" } },
+          { status: 500 },
+        ),
+      ),
+    );
+    renderForm();
+    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
+    await user.type(screen.getByLabelText("Телефон"), "291234567");
+    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    expect(
+      await screen.findByText(
+        "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("показывает общее сообщение при 422 без деталей", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json(
+          {
+            error: {
+              code: "validation_error",
+              message: "Ошибка валидации",
+              details: [],
+            },
+          },
+          { status: 422 },
+        ),
+      ),
+    );
+    renderForm();
+    await user.type(screen.getByLabelText("Ваше имя"), "Иван");
+    await user.type(screen.getByLabelText("Телефон"), "291234567");
+    await user.click(screen.getByRole("button", { name: /Оставить заявку/ }));
+    expect(
+      await screen.findByText(
+        "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.",
+      ),
+    ).toBeInTheDocument();
+  });
 });
