@@ -1,4 +1,4 @@
-from app.domain.telegram import TelegramBlockedError, TelegramDeliveryError, TelegramSubscriber
+from domain import TelegramBlockedError, TelegramDeliveryError, TelegramSubscriber
 
 
 def test_subscriber_defaults() -> None:

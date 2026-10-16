@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
-from app.infrastructure.config.settings import Settings
+from infrastructure.config.settings import Settings
 
 
 def make_settings(**overrides: object) -> Settings:

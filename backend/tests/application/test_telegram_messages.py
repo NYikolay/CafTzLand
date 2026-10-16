@@ -1,9 +1,9 @@
 from datetime import UTC, datetime
 from typing import Any
 
-from app.application.telegram.messages import render_lead_notification
-from app.domain.leads import Interest, Lead, LeadSource
-from app.domain.products import Product, ProductKind
+from application.telegram.messages import render_lead_notification
+from domain import Interest, Lead, LeadSource
+from domain import Product, ProductKind
 
 SENT_AT = datetime(2026, 10, 15, 20, 59, tzinfo=UTC)
 

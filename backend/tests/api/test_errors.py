@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from httpx import ASGITransport, AsyncClient
 
-from app.domain.exceptions import NotFoundError
-from app.infrastructure.config.settings import AppEnv, Settings
-from app.main import create_app
+from domain.exceptions import NotFoundError
+from infrastructure.config.settings import AppEnv, Settings
+from main import create_app
 
 
 async def test_domain_error_envelope(app: FastAPI, client: AsyncClient) -> None:

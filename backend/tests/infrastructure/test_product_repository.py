@@ -1,9 +1,9 @@
 from decimal import Decimal
 
-from app.domain.products import ProductKind
-from app.infrastructure.db.models.product import Product as ProductRow
-from app.infrastructure.db.models.product import ProductVariant as VariantRow
-from app.infrastructure.db.repositories.product_repository import to_domain
+from domain import ProductKind
+from infrastructure.db import Product as ProductRow
+from infrastructure.db import ProductVariant as VariantRow
+from infrastructure.db.repositories.product_repository import to_domain
 
 
 def make_variant(**overrides: object) -> VariantRow:

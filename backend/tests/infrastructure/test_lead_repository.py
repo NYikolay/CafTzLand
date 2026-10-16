@@ -1,8 +1,8 @@
 import pytest
 
-from app.domain.leads import Interest
-from app.infrastructure.db.models.order import Order
-from app.infrastructure.db.repositories.lead_repository import to_domain
+from domain import Interest
+from infrastructure.db.models.order import Order
+from infrastructure.db.repositories import to_domain
 
 
 def make_order(**overrides: object) -> Order:

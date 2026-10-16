@@ -1,5 +1,5 @@
-from app.application.products.list_products import ListProducts
-from app.domain.products import Product, ProductKind
+from application.products.list_products import ListProducts
+from domain import Product, ProductKind
 
 
 class FakeProductRepository:

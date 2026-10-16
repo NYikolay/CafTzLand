@@ -3,8 +3,8 @@ from decimal import Decimal
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.domain.products import Product, ProductKind, ProductVariant
-from app.presentation.dependencies import get_list_products
+from domain import Product, ProductKind, ProductVariant
+from presentation import get_list_products
 
 PRODUCTS = [
     Product(

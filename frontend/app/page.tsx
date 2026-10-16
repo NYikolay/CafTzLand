@@ -18,7 +18,7 @@ export default function HomePage() {
         <HeroSection />
         <WeekRoute />
         <WorkshopSection />
-        <Suspense fallback={<div className="h-[600px] bg-cream-deep" aria-hidden />}>
+        <Suspense fallback={<div className="h-150 bg-cream-deep" aria-hidden />}>
           <CoffeeCatalog />
         </Suspense>
         <SubscriptionSection />

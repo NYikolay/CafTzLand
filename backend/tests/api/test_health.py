@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.application.health.check_readiness import CheckReadiness
-from app.presentation.dependencies import get_readiness_check
+from application import CheckReadiness
+from presentation import get_readiness_check
 from tests.conftest import FakeProbe
 
 

@@ -1,4 +1,4 @@
-from app.domain.leads import (
+from domain import (
     INTEREST_BY_NAME,
     INTEREST_NAMES,
     Interest,

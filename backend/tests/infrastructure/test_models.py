@@ -3,7 +3,7 @@ from typing import cast
 from sqlalchemy import CheckConstraint, String, Table
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.infrastructure.db.models import Order, Product, ProductVariant, TelegramSubscriber
+from infrastructure.db import Order, Product, ProductVariant, TelegramSubscriber
 
 
 def test_table_names() -> None:

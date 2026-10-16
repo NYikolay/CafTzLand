@@ -1,7 +1,7 @@
-from app.infrastructure.config.settings import Settings
-from app.infrastructure.db.base import Base
-from app.infrastructure.db.probe import AsyncDatabaseProbe
-from app.infrastructure.db.session import create_db_engine, create_sessionmaker
+from infrastructure.config.settings import Settings
+from infrastructure.db.base import Base
+from infrastructure.db import AsyncDatabaseProbe
+from infrastructure.db import create_db_engine, create_sessionmaker
 
 
 class ExplodingConnect:

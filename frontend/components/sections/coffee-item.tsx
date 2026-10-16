@@ -10,7 +10,7 @@ export function CoffeeItem({ product }: { product: Product }) {
         <span className="font-mono text-[9px] uppercase tracking-[1px] text-muted">
           {product.kind === "assorted" ? "Ассорти" : "Зерно"}
         </span>
-        <span className="font-serif text-2xl">{product.code}</span>
+        <span className="font-serif text-2xl text-accent">{product.code}</span>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -18,7 +18,7 @@ export function CoffeeItem({ product }: { product: Product }) {
           {product.name}
         </h3>
         {product.tasting_notes ? (
-          <p className="text-sm font-medium">{product.tasting_notes}</p>
+          <p className="text-sm font-medium text-accent">{product.tasting_notes}</p>
         ) : null}
         {product.description ? (
           <p className="max-w-[520px] text-sm leading-relaxed text-muted">

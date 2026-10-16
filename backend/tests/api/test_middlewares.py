@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from app.application.health.check_readiness import CheckReadiness
-from app.infrastructure.config.settings import Settings
-from app.main import create_app
-from app.presentation.dependencies import get_readiness_check
+from application import CheckReadiness
+from infrastructure.config.settings import Settings
+from main import create_app
+from presentation import get_readiness_check
 from tests.conftest import FakeProbe
 
 

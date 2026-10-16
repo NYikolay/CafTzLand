@@ -10,7 +10,7 @@ export function HeroSection() {
       <Container>
         <div className="grid items-start gap-10 lg:grid-cols-[740fr_524fr] lg:gap-12">
           <div className="flex flex-col gap-7">
-            <Eyebrow className="text-accent-deep">01 / Главная история Кварты</Eyebrow>
+            <Eyebrow className="text-accent-deep">СВЕЖАЯ ОБЖАРКА. КАЖДЫЙ ЧЕТВЕРГ.</Eyebrow>
             <h1
               id="hero-heading"
               className="font-serif text-[clamp(44px,7vw,84px)] leading-[1.04] tracking-[-0.05em]"

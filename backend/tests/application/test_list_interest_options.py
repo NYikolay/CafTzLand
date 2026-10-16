@@ -1,5 +1,5 @@
-from app.application.leads.list_interest_options import ListInterestOptions
-from app.domain.leads import Interest, InterestName
+from application.leads import ListInterestOptions
+from domain import Interest, InterestName
 
 
 def test_lists_interest_options_with_russian_labels() -> None:

@@ -11,8 +11,8 @@ from aiogram.exceptions import (
 )
 from aiogram.methods import SendMessage
 
-from app.domain.telegram import TelegramBlockedError, TelegramDeliveryError
-from app.infrastructure.telegram.notifier import AiogramTelegramNotifier, create_telegram_bot
+from domain import TelegramBlockedError, TelegramDeliveryError
+from infrastructure.telegram.notifier import AiogramTelegramNotifier, create_telegram_bot
 
 METHOD = SendMessage(chat_id=1, text="test")
 

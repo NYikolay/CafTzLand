@@ -1,7 +1,7 @@
-from app.application.telegram.notify_new_lead import NotifyLeadResult, NotifyNewLead
-from app.domain.leads import Interest, Lead
-from app.domain.products import Product, ProductKind
-from app.domain.telegram import TelegramBlockedError, TelegramDeliveryError, TelegramSubscriber
+from application.telegram.notify_new_lead import NotifyLeadResult, NotifyNewLead
+from domain import Interest, Lead
+from domain import Product, ProductKind
+from domain import TelegramBlockedError, TelegramDeliveryError, TelegramSubscriber
 
 PRODUCT = Product(
     id=3,

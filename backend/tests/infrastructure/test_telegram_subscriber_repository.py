@@ -1,7 +1,7 @@
-from app.infrastructure.db.models.telegram_subscriber import (
+from infrastructure.db import (
     TelegramSubscriber as TelegramSubscriberRow,
 )
-from app.infrastructure.db.repositories.telegram_subscriber_repository import to_domain
+from infrastructure.db.repositories.telegram_subscriber_repository import to_domain
 
 
 def make_row(**overrides: object) -> TelegramSubscriberRow:

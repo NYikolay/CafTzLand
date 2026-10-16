@@ -1,6 +1,6 @@
 import pytest
 
-from app.infrastructure.phone import normalize_belarus_phone
+from infrastructure.phone import normalize_belarus_phone
 
 VALID = [
     "+375291234567",

@@ -1,4 +1,4 @@
-from app.application.health.check_readiness import CheckReadiness
+from application import CheckReadiness
 
 
 class StubProbe:

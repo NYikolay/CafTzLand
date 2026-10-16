@@ -1,4 +1,4 @@
-from app.domain.exceptions import ConflictError, DomainError, NotFoundError, ValidationError
+from domain.exceptions import ConflictError, DomainError, NotFoundError, ValidationError
 
 
 def test_domain_error_defaults() -> None:

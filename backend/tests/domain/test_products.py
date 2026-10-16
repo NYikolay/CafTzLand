@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from app.domain.products import ProductKind, ProductVariant
+from domain import ProductKind, ProductVariant
 
 
 def test_product_kind_values() -> None:

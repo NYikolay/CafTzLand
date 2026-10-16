@@ -4,11 +4,11 @@ from typing import Any
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.application.leads.create_lead import PRODUCT_UNAVAILABLE_MESSAGE, CreateLeadResult
-from app.application.telegram.notify_new_lead import NotifyLeadResult
-from app.domain.exceptions import ValidationError
-from app.domain.leads import Interest, Lead, LeadSource
-from app.presentation.dependencies import get_create_lead, get_notify_new_lead
+from application.leads import PRODUCT_UNAVAILABLE_MESSAGE, CreateLeadResult
+from application.telegram.notify_new_lead import NotifyLeadResult
+from domain.exceptions import ValidationError
+from domain import Interest, Lead, LeadSource
+from presentation import get_create_lead, get_notify_new_lead
 
 VALID_PAYLOAD: dict[str, Any] = {
     "name": "Иван",

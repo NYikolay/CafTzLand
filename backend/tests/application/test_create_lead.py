@@ -3,14 +3,14 @@ from datetime import timedelta
 
 import pytest
 
-from app.application.leads.create_lead import (
+from application.leads import (
     PRODUCT_UNAVAILABLE_MESSAGE,
     CreateLead,
     CreateLeadResult,
 )
-from app.domain.exceptions import ValidationError
-from app.domain.leads import Interest, Lead
-from app.domain.products import Product, ProductKind
+from domain.exceptions import ValidationError
+from domain import Interest, Lead
+from domain import Product, ProductKind
 
 WINDOW = timedelta(minutes=10)
 
